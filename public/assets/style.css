@@ -1,0 +1,54 @@
+@font-face {
+    font-family: theSans;
+    src: url('thesans.ttf');
+}
+@font-face {
+    font-family: theSansLight;
+    src: url('TheSansArabic-Light.otf');
+}
+
+* {
+    font-family: 'theSansLight';
+    font-weight: bold;
+}
+
+.form-custom-control {
+    height: 35px;
+    width: 100%;
+    font-size: 13px;
+    padding-right: 10px;
+    display: block;
+}
+
+.text-area {
+    height: 150px;
+}
+
+.mt-35 {
+    margin-top: 35px;
+}
+.text-blue {
+    color :#28889E !important;
+  }
+
+
+    
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+        width: 240px;
+        z-index: 600;
+        background-color: #28889E;
+    }
+    
+   
+   
+
+    .bg-blue {
+        background-color: #28889E;
+        color: white !important;
+    }
