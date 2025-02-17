@@ -140,7 +140,7 @@ class TAndCDocumentController extends Controller
 
         }
 
-        return redirect()->route('tcd.print-doc', ['id' => $newTCD->id]);
+        return redirect()->route('tcd.index');
 
 
     }
