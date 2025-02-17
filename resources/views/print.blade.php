@@ -299,7 +299,7 @@
                 <h3 class="text-white">
                     {{ $doc->mun_name }}
                 </h3>
-                <h2 class="text-blue">
+                <h2 class="text-blue" style="direction: rtl;">
                     كراسة الشروط و المواصفات
                 </h2>
                 <h2 class="text-white">

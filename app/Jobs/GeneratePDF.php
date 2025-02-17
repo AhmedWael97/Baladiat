@@ -36,18 +36,32 @@ class GeneratePDF implements ShouldQueue
         $options = new Options();
         $options->set('defaultFont', 'TheSansArabic'); 
 
-        // Generate PDF using the provided data
-        $pdf = PDF::loadView('print', ['doc' => $this->doc])
+        $html = view('print', ['doc' => $this->doc])->render();
+
+        $pdf = mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8');
+
+        $pdf = PDF::loadHTML($pdf)
         ->setOption([
             'fontDir' => public_path('/fonts'),
             'fontcache' => public_path('/fonts'),
             'defaultFont' => 'theSansLight',
             'enable_remote' => true,
-            'enable_html5_parser' => true
-        ]);
+            'enable_html5_parser' => true    
+        ])
+        ->save(storage_path("app/public/{$this->fileName}"));
+
+        // Generate PDF using the provided data
+        // $pdf = PDF::loadView('print', ['doc' => $this->doc])
+        // ->setOption([
+        //     'fontDir' => public_path('/fonts'),
+        //     'fontcache' => public_path('/fonts'),
+        //     'defaultFont' => 'theSansLight',
+        //     'enable_remote' => true,
+        //     'enable_html5_parser' => true
+        // ]);
 
         // Save the PDF to the server or storage
-        $pdf->save(storage_path("app/public/{$this->fileName}"));
+        //$pdf->save(storage_path("app/public/{$this->fileName}"));
 
         // $user = auth()->user(); // Get the authenticated user (or find a specific user)
         // Notification::send($user, new PDFReadyNotification($this->fileName));
