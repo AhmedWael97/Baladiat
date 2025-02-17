@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use ArPHP\I18N\Arabic;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -34,17 +35,28 @@ class GeneratePDF implements ShouldQueue
         ini_set('memory_limit', '-1');
 
         $options = new Options();
-        $options->set('defaultFont', 'TheSansArabic'); 
+        $options->set('defaultFont', 'TheSansArabic');
 
         // Generate PDF using the provided data
-        $pdf = PDF::loadView('print', ['doc' => $this->doc])
-        ->setOption([
-            'fontDir' => public_path('/fonts'),
-            'fontcache' => public_path('/fonts'),
-            'defaultFont' => 'theSansLight',
-            'enable_remote' => true,
-            'enable_html5_parser' => true
-        ]);
+        $html = view('print' , ['doc' => $this->doc])->render();
+
+        // to get arabic words
+
+        $arabic = new Arabic();
+        $p = $arabic->arIdentify($html);
+        for ($i = count($p) - 1; $i >= 0; $i -= 2) {
+            $utf8ar = $arabic->utf8Glyphs(substr($html, $p[$i - 1], $p[$i] - $p[$i - 1]));
+            $html = substr_replace($html, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
+        }
+
+        $pdf = PDF::loadHTML($html)
+            ->setOption([
+                'fontDir' => public_path('/fonts'),
+                'fontcache' => public_path('/fonts'),
+                'defaultFont' => 'theSansLight',
+                'enable_remote' => true,
+                'enable_html5_parser' => true
+            ]);
 
         // Save the PDF to the server or storage
         $pdf->save(storage_path("app/public/{$this->fileName}"));

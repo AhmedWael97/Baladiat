@@ -8,6 +8,7 @@ use App\Models\DocumentSection;
 use App\Models\Municipalities;
 use App\Models\TAndCDocument;
 use App\Traits\UploadFiles;
+use ArPHP\I18N\Arabic;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use niklasravnsborg\LaravelPdf\Facades\Pdf as FacadesPdf;
@@ -37,7 +38,7 @@ class TAndCDocumentController extends Controller
      */
     public function store(Request $request)
     {
-        
+
 
         $request->validate([
             'baladia_id' => 'required',
@@ -51,24 +52,24 @@ class TAndCDocumentController extends Controller
         $qr_img = '';
         $card_img = '';
         $plan_img = '';
-        
+
         if($request->land['qr_code']) {
             $qr_img = $this->upload('public/uploads', $request->file('land.qr_code'));
-            
+
         }
 
         if($request->land['plan_img']) {
             $plan_img = $this->upload('public/uploads', $request->file('land.plan_img'));
-            
+
         }
 
         if($request->land['card_img']) {
             $card_img = $this->upload('public/uploads', $request->file('land.card_img'));
-            
-        }
-        
 
-        
+        }
+
+
+
 
         $newTCDOriginal = TAndCDocument::whereId(2)->first();
         $newTCD = $newTCDOriginal->replicate();
@@ -81,9 +82,9 @@ class TAndCDocumentController extends Controller
         $newTCD->descripe_img = $card_img;
         $newTCD->save();
 
-        
+
         foreach($newTCDOriginal->sections as $section) {
-            
+
             // intro
             if($section->id == 4) {
                 $description = str_replace("{baladia_name}", $baladia_name, $section->description);
@@ -91,8 +92,8 @@ class TAndCDocumentController extends Controller
                 $description = str_replace("{planned}", $request->land['planned'] ?? '-', $description);
                 $description = str_replace("{land_no}", $request->land['no'] ?? '-', $description);
                 $description = str_replace("{city}", $request->land['city'] ?? '-', $description);
-                
-                
+
+
                 $new_section = $section->replicate();
                 $new_section->description = $description;
                 $new_section->document_id = $newTCD->id;
@@ -117,8 +118,8 @@ class TAndCDocumentController extends Controller
                 $table_body = str_replace('{areaInWords}', $request->land['areaInWords'] ?? '-', $table_body);
                 $table_body = str_replace('{lat}', $request->land['lat'] ?? '-', $table_body);
                 $table_body = str_replace('{long}', $request->land['long'] ?? '-', $table_body);
-             
-              
+
+
                 $newSec = $section->replicate();
                 $newSec->table_body = $table_body;
                 $newSec->document_id = $newTCD->id;
@@ -135,7 +136,7 @@ class TAndCDocumentController extends Controller
                 $newSec->save();
             }
 
-            
+
 
         }
 
@@ -146,38 +147,77 @@ class TAndCDocumentController extends Controller
 
 
     public function print($id) {
+
         $doc = TAndCDocument::findOrFail( $id);
         $docType = DocTypes::where('name', $doc->type_name)->first();
         if(!empty($docType)) {
             if($docType->has_theme == 0) {
-                return redirect()->back()->with('error', 'عفوا لا يوجد تصميم لهذا النوع');    
+                return redirect()->back()->with('error', 'عفوا لا يوجد تصميم لهذا النوع');
             } else {
 
-                //dd(storage_path('/'));
+                set_time_limit(50000); // 5 minutes
+                ini_set('memory_limit', '-1');
+//               GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf');
 
-               GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf');
-            // $doc =  TAndCDocument::findOrFail($id) ;
-            //  $pdf = FacadesPdf::loadView('print', compact('doc'));
-            //  $pdf->save(storage_path("app/public/test.pdf"));
+//                return redirect()->back()->with('success', 'يتم الان انشاء الملف الخاص بكـ و سيتم ارسال الاشعار حين يكون مكتمل للتحميل');
+
+                $html = view('test' , ['doc' => $doc])->render();
+
+                // to get arabic words
+
+                $arabic = new Arabic();
+                $p = $arabic->arIdentify($html);
+                for ($i = count($p) - 1; $i >= 0; $i -= 2) {
+                    $utf8ar = $arabic->utf8Glyphs(substr($html, $p[$i - 1], $p[$i] - $p[$i - 1]));
+                    $html = substr_replace($html, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
+                }
+
+                $pdf = PDF::loadHTML($html)
+                    ->setOption([
+                        'fontDir' => public_path('/fonts'),
+                        'fontcache' => public_path('/fonts'),
+                        'defaultFont' => 'theSansLight',
+                        'enable_remote' => true,
+                        'enable_html5_parser' => true
+                    ]);
+                return $pdf->stream('invoice_barcodes.pdf');
+
+                Browsershot::html($html)
+                    ->timeout(50000)
+                    ->save(public_path('test.pdf'));
+
+
+                return ;
+//            $pdf = Pdf::loadView('test-print', compact('doc'))
+//                ->setOption('isHtml5ParserEnabled', true)
+//                ->setOption('isRemoteEnabled', true)
+//                ->setOption('defaultFont', 'Amiri')
+//            ;
+
+//                \Spatie\LaravelPdf\Facades\Pdf::view('print',['doc' => $doc])
+//                    ->save(public_path('test.pdf'));
+
+//                $pdf = SnappyPdf::loadView('test-print', [
+//                    'doc' => $doc,
+//                ]);
+//                $pdf->setOption('enable-local-file-access', true);
 
 
 
-                // return view('print')->with('doc' , $doc);
-                // Optionally, send a notification to the user that PDF is being generated.
-                // You can return a response with a URL or a message that the PDF is being processed.
+//
 
                 return redirect()->back()->with('success', 'يتم الان انشاء الملف الخاص بكـ و سيتم ارسال الاشعار حين يكون مكتمل للتحميل');
             }
         } else {
             return redirect()->back()->with('error', 'عفوا لا يوجد تصميم لهذا النوع');
         }
-       
+
     }
 
     public function downloadPDF($fileName)
     {
         $filePath = storage_path("app/public/{$fileName}");
-        
+
         // Ensure the file exists before serving it
         if (file_exists($filePath)) {
             return response()->download($filePath);
@@ -186,7 +226,7 @@ class TAndCDocumentController extends Controller
         }
     }
 
-    
+
 
     /**
      * Display the specified resource.
