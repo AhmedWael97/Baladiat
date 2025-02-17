@@ -8,8 +8,6 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Notifications\PDFReadyNotification;
-use Illuminate\Support\Facades\Notification;
 use Dompdf\Options;
 class GeneratePDF implements ShouldQueue
 {
@@ -43,7 +41,9 @@ class GeneratePDF implements ShouldQueue
         ->setOption([
             'fontDir' => public_path('/fonts'),
             'fontcache' => public_path('/fonts'),
-            'defaultFont' => 'Cairo'
+            'defaultFont' => 'theSansLight',
+            'enable_remote' => true,
+            'enable_html5_parser' => true
         ]);
 
         // Save the PDF to the server or storage

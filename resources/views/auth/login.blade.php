@@ -57,7 +57,7 @@
             {{ implode('', $errors->all('<div class="text-danger">:message</div>')) }}
         @endif
 
-        <form method="post" action="{{ route('login') }}">
+        <form method="post" action="{{ route('login.post') }}">
             @csrf
             <img class="mb-4" src="{{ url('/uploads/amana_logo.png') }}" alt="" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">

@@ -10,8 +10,7 @@ use App\Models\TAndCDocument;
 use App\Traits\UploadFiles;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
+use niklasravnsborg\LaravelPdf\Facades\Pdf as FacadesPdf;
 
 class TAndCDocumentController extends Controller
 {
@@ -156,13 +155,14 @@ class TAndCDocumentController extends Controller
 
                 //dd(storage_path('/'));
 
-            //    GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf');
-            $doc =  TAndCDocument::findOrFail($id) ;
-            $pdf = Pdf::loadView('print', compact('doc'));
-            return $pdf->stream('invoice_barcodes.pdf');
+               GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf');
+            // $doc =  TAndCDocument::findOrFail($id) ;
+            //  $pdf = FacadesPdf::loadView('print', compact('doc'));
+            //  $pdf->save(storage_path("app/public/test.pdf"));
 
 
-                // return view('print')->with('doc' ,);
+
+                // return view('print')->with('doc' , $doc);
                 // Optionally, send a notification to the user that PDF is being generated.
                 // You can return a response with a URL or a message that the PDF is being processed.
 

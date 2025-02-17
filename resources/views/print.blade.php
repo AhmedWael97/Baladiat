@@ -4,32 +4,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <title>كراسة الشروط</title>
 
+
+    {{--
+    <link href="{{ url('/assets/print.css') }}" rel="stylesheet"> --}}
     <style>
         @font-face {
-            font-family: 'TheSansArabic';
-            src: url("{{ public_path('fonts/TheSansArabic.ttf') }}") format('truetype');
+            font-family: theSans;
+            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
         }
 
-        @page {
-            margin: 0px;
-            padding: 0px;
-
+        @font-face {
+            font-family: theSansLight;
+            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
         }
 
         * {
-            font-family: 'TheSansArabic', sans-serif !important;
-            
+            font-family: 'theSansLight' !important;
         }
 
         body {
-            direction: rtl !important;
-            text-align: right !important;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: right;
         }
 
+        @page {
+
+            margin: auto;
+            padding: 0;
+
+        }
 
         p {
             line-height: 20px;
@@ -37,7 +44,7 @@
 
         p,
         li {
-            font-family: 'TheSansArabic', sans-serif !important;
+            font-family: 'theSansLight';
             font-weight: bold;
         }
 
@@ -46,23 +53,21 @@
         h3,
         h4,
         h5 {
-            font-family: 'TheSansArabic', sans-serif !important;
+            font-family: 'theSansLight';
         }
 
         .mun_logo {
-            position: absolute;
-            right: 0;
-            left: 0;
-            top: 50px;
-            margin: auto;
-            text-align: center;
-
+            position: relative;
         }
 
         .mun_logo_img {
             width: auto;
             height: 100px;
-
+            top: 50px;
+            position: absolute;
+            margin: auto;
+            right: 0;
+            left: 0;
         }
 
         .page {
@@ -70,7 +75,7 @@
             height: 297mm;
             background: white;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            margin: auto;
+            margin: 1mm;
             page-break-after: always;
             /* يفصل كل صفحة عند الطباعة */
         }
@@ -80,7 +85,7 @@
             height: 257mm;
             background: white;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            margin: auto;
+            margin: 1mm;
             page-break-after: always;
             position: relative;
         }
@@ -121,7 +126,7 @@
 
         table {
             width: 190mm;
-            font-family: 'TheSansArabic', sans-serif !important;
+            font-family: 'theSansLight';
             font-size: 11px;
             border-collapse: collapse;
         }
@@ -254,10 +259,11 @@
         }
 
         @media print {
-
             body {
-                font-family: 'TheSansArabic', sans-serif !important;
+                margin: 0;
+                padding: 0;
             }
+
             .page,
             .page-sm {
                 box-shadow: none;
@@ -278,43 +284,14 @@
 
 <body>
     @php
-        $path = public_path($doc->cover_img);
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $cover_bg = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
-
-        $path = public_path($doc->page_img);
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $img_bg = 'data:image/' . $type . ';base64,' . base64_encode($data);
-
-
-        $path = public_path($doc->mun_logo);
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $mun_logo = 'data:image/' . $type . ';base64,' . base64_encode($data);
-
-
-
-        $path =   public_path($doc->sketching_img);
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $sketching_img = 'data:image/' . $type . ';base64,' . base64_encode($data);
-
-
-
-        $path =    public_path($doc->descripe_img);
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $descripeImg =  'data:image/' . $type . ';base64,' . base64_encode($data);
-
-       
-      
+        $cover_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->cover_img)));
+         $page_img =  "data:image/png;base64,".base64_encode(file_get_contents(url($doc->page_img)));
+        //$page_img = "";
     @endphp
     <div class="page cover">
         <div class="cover-image">
-            <img src="{{ $cover_bg }}" class="full-width-image" />
+            <img src="{{ $cover_img }}" class="full-width-image" />
             <div class="header">
                 <h3 class="text-white">
                     {{ $doc->first_title }}
@@ -398,10 +375,10 @@
     @foreach($array_chunks as $factory => $array)
         <div class="page-sm table">
             <div class="cover-image">
-                <img src="{{ $img_bg }}" class="full-width-image min_page" />
-                <div class="mun_logo">
-                    <img src="{{ $mun_logo }}" class="mun_logo_img" />
-                </div>
+                <img src="{{ $page_img }}" class="full-width-image min_page" />
+                {{-- <div class="mun_logo">
+                    <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+                </div> --}}
                 <div class="right-header">
                     <p class="text-blue f-bold f-size-10">
                         كراسة الشروط والمواصفات
@@ -484,9 +461,9 @@
         @if($section->hasPrePage == 1)
             <div class="page-sm table">
                 <div class="cover-image">
-                    <img src="{{ $img_bg }}" class="full-width-image min_page" />
+                    <img src="{{ $page_img }}" class="full-width-image min_page" />
                     <div class="mun_logo">
-                        <img src="{{ $mun_logo }}" class="mun_logo_img" />
+                        <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
                     </div>
                     <div class="right-header">
                         <p class="text-blue f-bold f-size-10">
@@ -505,6 +482,7 @@
                 </div>
             </div>
         @endif
+
         @if($section->contain_table == 1)
             @php
                 $table_headers = explode(',', $section->table_headers);
@@ -521,9 +499,9 @@
             @foreach($secChunks as $key => $chunk)
                 <div class="page-sm table">
                     <div class="cover-image">
-                        <img src="{{ $img_bg }}" class="full-width-image min_page" />
+                        <img src="{{ $page_img }}" class="full-width-image min_page" />
                         <div class="mun_logo">
-                            <img src="{{ $mun_logo }}" class="mun_logo_img" />
+                            <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
                         </div>
                         <div class="right-header">
                             <p class="text-blue f-bold f-size-10">
@@ -565,9 +543,11 @@
 
                                             @endforeach
                                         @endif
+
                                     </tbody>
                                 </table>
                             @endif
+
 
                             @if(!empty($section->sub_sections))
 
@@ -587,7 +567,9 @@
                                         </div>
                                     @endforeach
                                 @endif
+
                             @endif
+
                             @if(!empty($section->notes))
                                 <h4 class="sec_title text-blue">
                                     الملاحظات
@@ -596,16 +578,18 @@
                                     {!! $section->notes !!}
                                 </p>
                             @endif
+
                         </div>
                     </div>
                 </div>
             @endforeach
         @else
+
             <div class="page-sm table">
                 <div class="cover-image">
-                    <img src="{{ $img_bg }}" class="full-width-image min_page" />
+                    <img src="{{ $page_img }}" class="full-width-image min_page" />
                     <div class="mun_logo">
-                        <img src="{{ $mun_logo }}" class="mun_logo_img" />
+                        <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
                     </div>
                     <div class="right-header">
                         <p class="text-blue f-bold f-size-10">
@@ -646,9 +630,11 @@
                                                 </tr>
                                             @endforeach
                                         @endif
+
                                     </tbody>
                                 </table>
                         @endif
+
 
                         @if(!empty($section->sub_sections))
                             @php 
@@ -667,7 +653,9 @@
                                     </div>
                                 @endforeach
                             @endif
+
                         @endif
+
 
                         @if(!empty($section->notes))
                             <h4 class="sec_title">
@@ -677,18 +665,20 @@
                                 {!! $section->notes !!}
                             </p>
                         @endif
+
                     </div>
                 </div>
             </div>
         @endif
+
         @if(count($chunkSubSecs) > 1)
             @foreach($chunkSubSecs as $key => $subSec)
                 @if($key != 0)
                     <div class="page-sm table">
                         <div class="cover-image">
-                            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+                            <img src="{{ $page_img }}" class="full-width-image min_page" />
                             <div class="mun_logo">
-                                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+                                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
                             </div>
                             <div class="right-header">
                                 <p class="text-blue f-bold f-size-10">
@@ -723,12 +713,15 @@
                                 @endif
 
 
+
                             </div>
                         </div>
                     </div>
                 @endif
+
             @endforeach
         @endif
+
 
 
 
@@ -736,10 +729,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -759,10 +752,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -921,10 +914,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -937,7 +930,7 @@
                 <h4 class="text-blue">
                     2.10 المخطط العام للموقع
                 </h4>
-                <img src="{{ $sketching_img }}" style="width: auto; height: 455px;" />
+                <img src="{{ url($doc->sketching_img) }}" style="width: auto; height: 455px;" />
             </div>
         </div>
     </div>
@@ -945,10 +938,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -961,7 +954,7 @@
                 <h4 class="text-blue">
                     بطاقة وصف الموقع
                 </h4>
-                <img src="{{ $descripeImg }}" style="width: auto;
+                <img src="{{ url('/uploads/wasefElmawqe3.png') }}" style="width: auto;
     height: 750px;
     position: absolute;
     left: 0;
@@ -974,10 +967,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1084,10 +1077,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1151,10 +1144,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1219,10 +1212,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1342,10 +1335,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1473,10 +1466,10 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $img_bg }}" class="full-width-image min_page" />
-            <div class="mun_logo">
-                <img src="{{ $mun_logo }}" class="mun_logo_img" />
-            </div>
+            <img src="{{ $page_img }}" class="full-width-image min_page" />
+            {{-- <div class="mun_logo">
+                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            </div> --}}
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1590,8 +1583,6 @@
             </div>
         </div>
     </div>
-
-
 
 </body>
 

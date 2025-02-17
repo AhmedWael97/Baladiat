@@ -14,9 +14,9 @@ Route::get('/printly/2', function() {
 
 Route::get('/login', function() {
     return view('auth.login');
-});
+})->name('login');
 
-Route::post('/login-post',[LoginController::class, 'login'])->name('login');
+Route::post('/login-post',[LoginController::class, 'login'])->name('login.post');
 
 
 Route::get('/', function() {
