@@ -38,7 +38,7 @@ class GeneratePDF implements ShouldQueue
 
         $html = view('print', ['doc' => $this->doc])->render();
 
-        $pdf = mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8');
+        $pdf = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
         $pdf = PDF::loadHTML($pdf)
         ->setOption([

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>كراسة الشروط</title>
 
 
@@ -21,8 +21,23 @@
             src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
         }
 
+        @page {
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+            -o-transform: rotateY(180deg);
+            -ms-transform: rotateY(180deg);
+            unicode-bidi: bidi-override;
+            direction: rtl;
+        }
+
         * {
             font-family: 'theSansLight' !important;
+            -webkit-transform: rotateY(180deg);
+            -moz-transform: rotateY(180deg);
+            -o-transform: rotateY(180deg);
+            -ms-transform: rotateY(180deg);
+            unicode-bidi: bidi-override;
+            direction: rtl;
         }
 
         body {
@@ -286,7 +301,7 @@
     @php
 
         $cover_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->cover_img)));
-         $page_img =  "data:image/png;base64,".base64_encode(file_get_contents(url($doc->page_img)));
+        $page_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->page_img)));
         //$page_img = "";
     @endphp
     <div class="page cover">
