@@ -34,7 +34,7 @@ class GeneratePDF implements ShouldQueue
         ini_set('memory_limit', '-1');
 
         $options = new Options();
-        $options->set('defaultFont', 'TheSansArabic'); 
+        $options->set('defaultFont', 'TheSansArabic');
 
         $html = view('print', ['doc' => $this->doc])->render();
 
@@ -46,7 +46,7 @@ class GeneratePDF implements ShouldQueue
             'fontcache' => public_path('/fonts'),
             'defaultFont' => 'theSansLight',
             'enable_remote' => true,
-            'enable_html5_parser' => true    
+            'enable_html5_parser' => true
         ])
         ->save(storage_path("app/public/{$this->fileName}"));
 

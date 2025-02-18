@@ -9,16 +9,16 @@
 
 
     {{--
-    <link href="{{ url('/assets/print.css') }}" rel="stylesheet"> --}}
+    <link href="{{ public_path('/assets/print.css') }}" rel="stylesheet"> --}}
     <style>
         @font-face {
             font-family: theSans;
-            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
+            src: public_path('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
         }
 
         @font-face {
             font-family: theSansLight;
-            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
+            src: public_path('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
         }
 
         @page {
@@ -323,7 +323,7 @@
                 <h2 class="text-blue">
                     {{ $doc->type_name }}
                 </h2>
-                @php 
+                @php
                     $land = json_decode($doc->land_spec);
                 @endphp
                 <p class="text-white f-size-14 f-bold">
@@ -566,7 +566,7 @@
 
                             @if(!empty($section->sub_sections))
 
-                                @php 
+                                @php
                                     $sub_sec = $chunkSubSecs[0];
 
                                 @endphp
@@ -652,7 +652,7 @@
 
 
                         @if(!empty($section->sub_sections))
-                            @php 
+                            @php
                                 $sub_sec = $chunkSubSecs[0];
 
                             @endphp
