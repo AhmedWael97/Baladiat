@@ -12,7 +12,7 @@ class MunicipalitiesController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.muni.index')->with('muns', Municipalities::get());
     }
 
     /**
@@ -20,7 +20,7 @@ class MunicipalitiesController extends Controller
      */
     public function create()
     {
-        //
+        return redirect()->back()->with('error', 'لا تملك الصلاحية');
     }
 
     /**
@@ -44,7 +44,7 @@ class MunicipalitiesController extends Controller
      */
     public function edit(Municipalities $municipalities)
     {
-        //
+        return redirect()->back()->with('error', 'لا تملك الصلاحية');
     }
 
     /**
@@ -60,6 +60,6 @@ class MunicipalitiesController extends Controller
      */
     public function destroy(Municipalities $municipalities)
     {
-        //
+        return redirect()->back()->with('error', 'لا تملك الصلاحية');
     }
 }

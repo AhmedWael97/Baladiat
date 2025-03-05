@@ -56,6 +56,9 @@
                         <a href="{{ route('tcd.print-doc', $tcd->id) }}" class="btn btn-success btn-sm">
                             <i class="fas fa-print"></i>
                         </a>
+                        <a href="{{ route('tcd.view', $tcd->id) }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach

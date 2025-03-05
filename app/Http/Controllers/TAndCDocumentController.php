@@ -11,6 +11,7 @@ use App\Traits\UploadFiles;
 use ArPHP\I18N\Arabic;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use niklasravnsborg\LaravelPdf\Facades\Pdf as FacadesPdf;
 
 class TAndCDocumentController extends Controller
@@ -155,57 +156,8 @@ class TAndCDocumentController extends Controller
                 return redirect()->back()->with('error', 'عفوا لا يوجد تصميم لهذا النوع');
             } else {
 
-                set_time_limit(50000); // 5 minutes
-                ini_set('memory_limit', '-1');
-//               GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf');
-
-//                return redirect()->back()->with('success', 'يتم الان انشاء الملف الخاص بكـ و سيتم ارسال الاشعار حين يكون مكتمل للتحميل');
-
-                $html = view('test' , ['doc' => $doc])->render();
-
-                // to get arabic words
-
-                $arabic = new Arabic();
-                $p = $arabic->arIdentify($html);
-                for ($i = count($p) - 1; $i >= 0; $i -= 2) {
-                    $utf8ar = $arabic->utf8Glyphs(substr($html, $p[$i - 1], $p[$i] - $p[$i - 1]));
-                    $html = substr_replace($html, $utf8ar, $p[$i - 1], $p[$i] - $p[$i - 1]);
-                }
-
-                $pdf = PDF::loadHTML($html)
-                    ->setOption([
-                        'fontDir' => public_path('/fonts'),
-                        'fontcache' => public_path('/fonts'),
-                        'defaultFont' => 'theSansLight',
-                        'enable_remote' => true,
-                        'enable_html5_parser' => true
-                    ]);
-                return $pdf->stream('invoice_barcodes.pdf');
-
-                Browsershot::html($html)
-                    ->timeout(50000)
-                    ->save(public_path('test.pdf'));
-
-
-                return ;
-//            $pdf = Pdf::loadView('test-print', compact('doc'))
-//                ->setOption('isHtml5ParserEnabled', true)
-//                ->setOption('isRemoteEnabled', true)
-//                ->setOption('defaultFont', 'Amiri')
-//            ;
-
-//                \Spatie\LaravelPdf\Facades\Pdf::view('print',['doc' => $doc])
-//                    ->save(public_path('test.pdf'));
-
-//                $pdf = SnappyPdf::loadView('test-print', [
-//                    'doc' => $doc,
-//                ]);
-//                $pdf->setOption('enable-local-file-access', true);
-
-
-
-//
-
+                
+              GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf', Auth::user()->id);
                 return redirect()->back()->with('success', 'يتم الان انشاء الملف الخاص بكـ و سيتم ارسال الاشعار حين يكون مكتمل للتحميل');
             }
         } else {
@@ -231,9 +183,9 @@ class TAndCDocumentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TAndCDocument $tAndCDocument)
+    public function show($id)
     {
-        //
+        return view('admin.documents.view')->with('doc' , TAndCDocument::findOrFail($id));
     }
 
     /**

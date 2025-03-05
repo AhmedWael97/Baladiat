@@ -15,10 +15,12 @@ class PDFReadyNotification extends Notification
      * Create a new notification instance.
      */
     protected $fileName;
+    protected $path;
 
-    public function __construct($fileName)
+    public function __construct($fileName, $path)
     {
         $this->fileName = $fileName;
+        $this->path = $path;
     }
 
     public function via($notifiable)
@@ -47,7 +49,8 @@ class PDFReadyNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'path' => $this->path,
+            'file_name' => $this->fileName
         ];
     }
 }

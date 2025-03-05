@@ -90,49 +90,42 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span class="badge badge-danger badge-counter">{{ Auth::user()->notifications()->where('read_at', null)->count() }}</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div style="right: -35px;"
                                 class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
-                                    Alerts Center
+                                    الاشعارات
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
+                                @forelse(Auth::user()->notifications as $notification)
+                                    <a class="dropdown-item d-flex align-items-center" href="{{ url('/storage').'/'.$notification->data["file_name"]  }}" {{ $notification->type == 'App\Notifications\PDFReadyNotification' ? 'download' : '' }}>
+                                        <div class="ml-3">
+                                            <div class="icon-circle bg-primary">
+                                                @if($notification->type == "App\Notifications\PDFReadyNotification")
+                                                    <i class="fas fa-file-download text-white"></i>
+                                                @else
+                                                    <i class="fas fa-check text-white"></i>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
+                                        <div>
+                                            <div class="small text-gray-500">{{ Date('M, d Y', strtotime($notification->created_at)) }}</div>
+                                            <span class="font-weight-bold">
+                                                @if($notification->type == 'App\Notifications\PDFReadyNotification')
+                                                    الملف جاهز للتحميل الان اضغط هنا
+                                                @else
+                                                @endif
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                                    </a>
+                                @empty
+                                    <p class="text-center mt-2 mb-2">
+                                        لا توجد اي اشعارات
+                                    </p>
+                                @endforelse
+
                             </div>
                         </li>
 
@@ -187,12 +180,12 @@
                             </div>
                         @endif
                         @if(Session::has('success'))
-                        <div class="alert alert-success">
-                            <small>
-                                {{ Session::get('success') }}
-                            </small>
-                        </div>
-                    @endif
+                            <div class="alert alert-success">
+                                <small>
+                                    {{ Session::get('success') }}
+                                </small>
+                            </div>
+                        @endif
                     </div>
 
                     @yield('content')

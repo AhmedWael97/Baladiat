@@ -38,6 +38,28 @@
       <span>إضافة كراسة</span></a>
   </li>
 
+  
+
+ 
+   <!-- Heading -->
+   <div class="sidebar-heading">
+    البلديات
+  </div>
+
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('mun.index') }}">
+      <i class="fas fa-fw fa-file"></i>
+      <span>البلديات</span></a>
+  </li>
+
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href="{{  route('mun.create')  }}">
+      <i class="fas fa-fw fa-plus-circle"></i>
+      <span>إضافة بلدية</span></a>
+  </li>
+
 
 
 

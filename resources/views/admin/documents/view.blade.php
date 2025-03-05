@@ -5,49 +5,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
     <title>كراسة الشروط</title>
 
-
-    {{--
-    <link href="{{ public_path('/assets/print.css') }}" rel="stylesheet"> --}}
     <style>
         @font-face {
-            font-family: theSans;
-            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
-        }
-
-        @font-face {
-            font-family: theSansLight;
-            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
+            font-family: 'TheSansArabic';
+            src: url("{{ url('fonts/TheSansArabic-Light.ttf') }}") format('truetype');
         }
 
         @page {
-            direction: rtl !important;
-            text-align: rtl !important;
-            margin: 0;
+            margin: 0px;
+            padding: 0px;
+
         }
 
         * {
-            font-family: 'theSansLight' !important;
-            unicode-bidi: bidi-override;
-            direction: rtl;
+            font-family: 'TheSansArabic', sans-serif !important;
+            
         }
 
         body {
-            unicode-bidi: bidi-override;
-            direction: rtl;
-            text-align: right;
+            direction: rtl !important;
+            text-align: right !important;
+            margin: 0;
         }
 
-        p {}
+
+        p {
+            line-height: 20px;
+        }
 
         p,
         li {
-            font-family: 'theSansLight';
+            font-family: 'TheSansArabic', sans-serif !important;
             font-weight: bold;
-            margin-bottom: 0 !important;
-            line-height: 10px;
-
         }
 
         h1,
@@ -55,22 +47,23 @@
         h3,
         h4,
         h5 {
-            font-family: 'theSansLight';
-            line-height: 20px;
+            font-family: 'TheSansArabic', sans-serif !important;
         }
 
         .mun_logo {
-            position: relative;
+            position: absolute;
+            right: 0;
+            left: 0;
+            top: 50px;
+            margin: auto;
+            text-align: center;
+
         }
 
         .mun_logo_img {
             width: auto;
             height: 100px;
-            top: 50px;
-            position: absolute;
-            margin: auto;
-            right: 0;
-            left: 0;
+
         }
 
         .page {
@@ -78,7 +71,7 @@
             height: 297mm;
             background: white;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            margin: 1mm;
+            margin: auto;
             page-break-after: always;
             /* يفصل كل صفحة عند الطباعة */
         }
@@ -88,7 +81,7 @@
             height: 257mm;
             background: white;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            margin: 1mm;
+            margin: auto;
             page-break-after: always;
             position: relative;
         }
@@ -110,6 +103,7 @@
         .header {
             position: relative;
             margin: auto;
+            text-align: center;
             padding-top: 85mm;
         }
 
@@ -120,17 +114,15 @@
         }
 
         .table_content {
-
-            margin: auto;
-            margin-top: 10mm;
-            margin-right:15mm;
-            margin-left:15mm;
+            position: relative;
+            top: 20mm;
+            padding-right: 10mm;
             width: 180mm;
         }
 
         table {
             width: 190mm;
-            font-family: 'theSansLight';
+            font-family: 'TheSansArabic', sans-serif !important;
             font-size: 11px;
             border-collapse: collapse;
         }
@@ -158,7 +150,7 @@
         }
 
         .text-center {
-            text-align: center !important;
+            text-align: center;
         }
 
         .text-right {
@@ -187,11 +179,8 @@
 
         .desc {
             position: relative;
-            right: 1mm;
-            width: 150mm;
-            text-align: right;
-            direction: rtl;
-
+            padding-right: 10mm;
+            width: 170mm;
         }
 
         ul li {
@@ -241,6 +230,7 @@
 
         .sec_title {
             font-size: 14px;
+            margin-top: 35px;
         }
 
         .sec_desc {
@@ -266,11 +256,10 @@
         }
 
         @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
 
+            body {
+                font-family: 'TheSansArabic', sans-serif !important;
+            }
             .page,
             .page-sm {
                 box-shadow: none;
@@ -289,67 +278,86 @@
     </style>
 </head>
 
-<body style="direction: rtl; text-align: right;">
+<body id="body">
     @php
+        $path = public_path($doc->cover_img);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $cover_bg = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
-        $cover_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->cover_img)));
-        $page_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->page_img)));
-        //$page_img = "";
+       
+
+        $img_bg = url($doc->page_img);
+        
+
+
+        $mun_logo = ''; //url($doc->mun_logo);
+       
+
+
+
+        $sketching_img =   url($doc->sketching_img);
+        
+
+
+
+        $descripeImg =    url($doc->descripe_img);
+       
+
+       
+      
     @endphp
     <div class="page cover">
         <div class="cover-image">
-            <img src="{{ $cover_img }}" class="full-width-image" />
+            <img src="{{ $cover_bg }}" class="full-width-image" />
             <div class="header">
-                <h3 class="text-white text-center">
+                <h3 class="text-white">
                     {{ $doc->first_title }}
                 </h3>
-                <h3 class="text-white text-center">
+                <h3 class="text-white">
                     {{ $doc->mun_name }}
                 </h3>
-                <h2 class="text-blue text-center" style="direction: rtl; margin-bottom: 10px;">
+                <h2 class="text-blue">
                     كراسة الشروط و المواصفات
                 </h2>
-                <h2 class="text-white text-center" style=" margin-bottom: 10px;">
+                <h2 class="text-white">
                     إنشاء و تشغيل وصيانة
                 </h2>
-                <h2 class="text-blue text-center" style=" margin-bottom: 10px;">
+                <h2 class="text-blue">
                     {{ $doc->type_name }}
                 </h2>
-                @php
+                @php 
                     $land = json_decode($doc->land_spec);
                 @endphp
-                <p class="text-white f-size-14 f-bold text-center" style="margin-bottom: 10px;">
-                    اسم الحي <span>({{ $land->district }})</span> - رقم المخطط <span>({{ $land->planned }})</span> - رقم
-                    القطعة <span>({{ $land->no }})</span>
+                <p class="text-white f-size-14 f-bold">
+                    اسم الحي ({{ $land->district }}) - رقم المخطط ({{ $land->planned }}) - رقم القطعة ({{ $land->no }})
                 </p>
 
-                <p class="text-white p-sm mt-10 f-size-12 text-center" style="margin-bottom: 10px;">
+                <p class="text-white p-sm mt-10 f-size-12">
                     المساحة ( {{ $land->area }} ) م2
                 </p>
 
-                <p class="text-white p-sm mt-10 text-center f-size-12" style="margin-bottom: 10px;">
-                    <span>رقم المنافسة </span>
-                    <span>( ...................................... )</span>
-                    <span> لعام 1446 هـ </span>
+                <p class="text-white p-sm mt-10 f-size-12">
+                    رقم المنافسة ( ...................................... ) لعام 1446 هـ
                 </p>
             </div>
-            <div class="desc mt-10" style="text-align: right; direction :rtl">
-                <p class="text-white f-size-9" style="margin-bottom: 0px;">
+            <div class="desc mt-10">
+                <p class="text-white f-size-9">
                     يقدم المستثمر عطاءه في المنافسة بإحدى الطرق الآتية:
                 </p>
-                <ul style="text-align: right; direction: rtl; margin-bottom: 5px;">
-                    <li style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                <ul>
+                    <li>
                         عن طريق الموقع الإلكتروني Furas.momra.gov.sa
                     </li>
-                    <li style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                    <li>
                         عن طريق تطبيق الأجهزة الذكية "فرص"
                     </li>
-                    <li style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                    <li>
                         لن يقبل أي عطاء لم يتم تقديمه إلكترونياً
                     </li>
                 </ul>
 
-                <p class="text-white f-size-9 pr-8 " style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                <p class="text-white f-size-9 pr-8 ">
                     وفي حال تعذر تقديم العطاء عن طريق المنافسة الإلكترونية لأسباب فنية فيقدم العطاء عن طريق الظرف
                     المختوم باليد في موعد وتاريخ فتح المظاريف المعلن عنه شريطة تقديم ما يثبت وجود مشكلة فنية أثناء
                     التقديم على المنافسة الإلكترونية مع ضرورة تقديم بلاغ من خلال التواصل مع مركز الاتصال الوطني على
@@ -385,7 +393,7 @@
     @foreach($array_chunks as $factory => $array)
         <div class="page-sm table">
             <div class="cover-image">
-                <img src="{{ $page_img }}" class="full-width-image min_page" />
+                <img src="{{ $img_bg }}" class="full-width-image min_page" />
                 {{-- <div class="mun_logo">
                     <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
                 </div> --}}
@@ -417,6 +425,7 @@
                             </th>
                         </thead>
                         <tbody>
+                           
                             @foreach($array as $key => $element)
                                 <tr>
                                     <td class="text-center" style="width: 10%">
@@ -471,16 +480,16 @@
         @if($section->hasPrePage == 1)
             <div class="page-sm table">
                 <div class="cover-image">
-                    <img src="{{ $page_img }}" class="full-width-image min_page" />
+                    <img src="{{ $img_bg }}" class="full-width-image min_page" />
                     <div class="mun_logo">
-                        <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+                        <img src="{{ $mun_logo }}" class="mun_logo_img" />
                     </div>
                     <div class="right-header">
                         <p class="text-blue f-bold f-size-10">
                             كراسة الشروط والمواصفات
                         </p>
                         <p class="text-blue f-bold f-size-10">
-                            إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                            (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                         </p>
                     </div>
 
@@ -492,7 +501,6 @@
                 </div>
             </div>
         @endif
-
         @if($section->contain_table == 1)
             @php
                 $table_headers = explode(',', $section->table_headers);
@@ -509,16 +517,16 @@
             @foreach($secChunks as $key => $chunk)
                 <div class="page-sm table">
                     <div class="cover-image">
-                        <img src="{{ $page_img }}" class="full-width-image min_page" />
+                        <img src="{{ $img_bg }}" class="full-width-image min_page" />
                         <div class="mun_logo">
-                            <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+                            <img src="{{ $mun_logo }}" class="mun_logo_img" />
                         </div>
                         <div class="right-header">
                             <p class="text-blue f-bold f-size-10">
                                 كراسة الشروط والمواصفات
                             </p>
                             <p class="text-blue f-bold f-size-10">
-                                إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                                (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                             </p>
                         </div>
 
@@ -553,15 +561,13 @@
 
                                             @endforeach
                                         @endif
-
                                     </tbody>
                                 </table>
                             @endif
 
-
                             @if(!empty($section->sub_sections))
 
-                                @php
+                                @php 
                                     $sub_sec = $chunkSubSecs[0];
 
                                 @endphp
@@ -577,9 +583,7 @@
                                         </div>
                                     @endforeach
                                 @endif
-
                             @endif
-
                             @if(!empty($section->notes))
                                 <h4 class="sec_title text-blue">
                                     الملاحظات
@@ -588,25 +592,23 @@
                                     {!! $section->notes !!}
                                 </p>
                             @endif
-
                         </div>
                     </div>
                 </div>
             @endforeach
         @else
-
             <div class="page-sm table">
                 <div class="cover-image">
-                    <img src="{{ $page_img }}" class="full-width-image min_page" />
+                    <img src="{{ $img_bg }}" class="full-width-image min_page" />
                     <div class="mun_logo">
-                        <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+                        <img src="{{ $mun_logo }}" class="mun_logo_img" />
                     </div>
                     <div class="right-header">
                         <p class="text-blue f-bold f-size-10">
                             كراسة الشروط والمواصفات
                         </p>
                         <p class="text-blue f-bold f-size-10">
-                            إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                            (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                         </p>
                     </div>
 
@@ -640,32 +642,28 @@
                                                 </tr>
                                             @endforeach
                                         @endif
-
                                     </tbody>
                                 </table>
                         @endif
 
-
                         @if(!empty($section->sub_sections))
-                                @php
-                                    $sub_sec = $chunkSubSecs[0];
+                            @php 
+                                $sub_sec = $chunkSubSecs[0];
 
-                                @endphp
-                                @if(gettype($sub_sec) == 'array')
-                                    @foreach($sub_sec as $sec)
-                                        <div class="sub_sec">
-                                            <h4 class="sec_title text-blue">
-                                                {!! $sec->title !!}
-                                            </h4>
-                                            <p class="sec_desc">
-                                                {!! $sec->content !!}
-                                            </p>
-                                        </div>
-                                    @endforeach
-                                @endif
-
+                            @endphp
+                            @if(gettype($sub_sec) == 'array')
+                                @foreach($sub_sec as $sec)
+                                    <div class="sub_sec">
+                                        <h4 class="sec_title text-blue">
+                                            {!! $sec->title !!}
+                                        </h4>
+                                        <p class="sec_desc">
+                                            {!! $sec->content !!}
+                                        </p>
+                                    </div>
+                                @endforeach
+                            @endif
                         @endif
-
 
                         @if(!empty($section->notes))
                             <h4 class="sec_title">
@@ -675,27 +673,25 @@
                                 {!! $section->notes !!}
                             </p>
                         @endif
-
                     </div>
                 </div>
             </div>
         @endif
-
         @if(count($chunkSubSecs) > 1)
             @foreach($chunkSubSecs as $key => $subSec)
                 @if($key != 0)
                     <div class="page-sm table">
                         <div class="cover-image">
-                            <img src="{{ $page_img }}" class="full-width-image min_page" />
+                            <img src="{{ $img_bg }}" class="full-width-image min_page" />
                             <div class="mun_logo">
-                                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+                                <img src="{{ $mun_logo }}" class="mun_logo_img" />
                             </div>
                             <div class="right-header">
                                 <p class="text-blue f-bold f-size-10">
                                     كراسة الشروط والمواصفات
                                 </p>
                                 <p class="text-blue f-bold f-size-10">
-                                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                                 </p>
                             </div>
 
@@ -723,15 +719,12 @@
                                 @endif
 
 
-
                             </div>
                         </div>
                     </div>
                 @endif
-
             @endforeach
         @endif
-
 
 
 
@@ -739,16 +732,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
 
@@ -762,16 +755,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
 
@@ -924,28 +917,22 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
                 <h4 class="text-blue">
                     2.10 المخطط العام للموقع
                 </h4>
-
-
-                @php 
-                    $sketching_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->sketching_img)));
-                @endphp
-
                 <img src="{{ $sketching_img }}" style="width: auto; height: 455px;" />
             </div>
         </div>
@@ -954,34 +941,28 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
                 <h4 class="text-blue">
                     بطاقة وصف الموقع
                 </h4>
-
-
-                @php 
-                    $descripe_img = "data:image/jpg;base64," . base64_encode(file_get_contents(url($doc->descripe_img)));
-                @endphp
-
-                <img src="{{ $descripe_img }}" style="width: auto;
-                    height: 750px;
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    margin: auto;" />
+                <img src="{{ $descripeImg }}" style="width: auto;
+    height: 750px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;" />
             </div>
         </div>
     </div>
@@ -989,16 +970,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
@@ -1099,16 +1080,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
@@ -1166,16 +1147,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
@@ -1234,16 +1215,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
@@ -1357,16 +1338,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
@@ -1488,16 +1469,16 @@
 
     <div class="page-sm table">
         <div class="cover-image">
-            <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
-                <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            <img src="{{ $img_bg }}" class="full-width-image min_page" />
+            <div class="mun_logo">
+                <img src="{{ $mun_logo }}" class="mun_logo_img" />
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
                 </p>
                 <p class="text-blue f-bold f-size-10">
-                    إنشاء و تشغيل و صيانة <span> {{ $doc->type_name }}</span> ببلدية <span> {{ $doc->mun_name }} </span>
+                    (إنشاء وتشغيل وصيانة سوق تجاري ببلدية {{ $doc->mun_name }})
                 </p>
             </div>
             <div class="table_content">
@@ -1606,6 +1587,15 @@
         </div>
     </div>
 
-</body>
 
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        const element = document.getElementById("body");
+        html2pdf().from(element).save('download.pdf');
+    });
+</script>
 </html>
