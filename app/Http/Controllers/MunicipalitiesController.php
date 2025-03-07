@@ -20,7 +20,7 @@ class MunicipalitiesController extends Controller
      */
     public function create()
     {
-        return redirect()->back()->with('error', 'لا تملك الصلاحية');
+        return view('admin.muni.create');
     }
 
     /**
@@ -28,7 +28,23 @@ class MunicipalitiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+            $request->validate([
+                'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+                'name' => 'required|string|max:255', 
+            ]);
+            
+            if ($request->logo) {
+                $file = $request->file('logo');
+                $filename = time() . '_' . $file->getClientOriginalName(); 
+                $path = public_path('uploads');
+                $file->move($path, $filename);
+            }
+            $municipality = new Municipalities();
+            $municipality->name = $request->name;
+            $municipality->logo = 'uploads/' . $filename;
+        
+            $municipality->save();
+            return redirect()->route('mun.index')->with('success', 'تم حفظ البلدية بنجاح');
     }
 
     /**
@@ -42,24 +58,50 @@ class MunicipalitiesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Municipalities $municipalities)
+    public function edit($id)
     {
-        return redirect()->back()->with('error', 'لا تملك الصلاحية');
-    }
+        $man = Municipalities::find($id);
+        if ($man) {
+            return view('admin.muni.edit')->with('mun', $man);
+        }
+        return redirect()->back()->with('error', 'لا تملك الصلاحية');}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Municipalities $municipalities)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'name' => 'required|string|max:255', 
+        ]);
+
+        $municipality = Municipalities::find($request->id);
+        if ($municipality) {
+            if ($request->logo) {
+                $file = $request->file('logo');
+                $filename = time() . '_' . $file->getClientOriginalName(); 
+                $path = public_path('uploads');
+                $file->move($path, $filename);
+            }
+            $municipality->name = $request->name;
+            $municipality->logo = 'uploads/' . $filename;
+            $municipality->save();
+            return redirect()->route('mun.index')->with('success', 'تم تعديل البلدية بنجاح');
+        }
+        return redirect()->back()->with('error', 'لا تملك الصلاحية');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Municipalities $municipalities)
+    public function destroy($id)
     {
+        $man = Municipalities::find($id);
+        if ($man) {
+            $man->delete();
+            return redirect()->route('mun.index')->with('success', 'تم حذف البلدية بنجاح');
+        }
         return redirect()->back()->with('error', 'لا تملك الصلاحية');
     }
 }

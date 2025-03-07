@@ -407,26 +407,27 @@
                     <table>
                         <thead>
                             <th class="text-center" style="width: 10%">
-                                م
+                                الصفحة
                             </th>
                             <th class="text-right pr-1" style="width: 80%">
                                 المحتوي
                             </th>
                             <th class="text-center" style="width: 10%">
-                                الصفحة
+                                م
                             </th>
                         </thead>
                         <tbody>
                             @foreach($array as $key => $element)
                                 <tr>
                                     <td class="text-center" style="width: 10%">
-                                        {{ $element['table_no'] }}
+                                        {{ $element['page_no'] }}
                                     </td>
                                     <td class="text-right pr-1" style="width: 80%">
                                         {!!  str_replace(':', ' ', $element['title']) !!}
                                     </td>
+                                   
                                     <td class="text-center" style="width: 10%">
-                                        {{ $element['page_no'] }}
+                                        {{ $element['table_no'] }}
                                     </td>
                                 </tr>
                             @endforeach

@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
             Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
             Route::get('/destroy/{id}', 'destroy')->name('delete');
         });
     });
