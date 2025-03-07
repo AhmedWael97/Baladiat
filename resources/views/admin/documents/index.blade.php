@@ -6,6 +6,7 @@
     الرئيسية / جميع الكراسات
 @endsection
 @section('content')
+
 <div class="container">
     <div class="row mb-2">
         <div class="col-12">
@@ -59,6 +60,7 @@
                         <a href="{{ route('tcd.view', $tcd->id) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i>
                         </a>
+                        
                     </td>
                 </tr>
             @endforeach

@@ -9,6 +9,7 @@ use App\Models\Municipalities;
 use App\Models\TAndCDocument;
 use App\Traits\UploadFiles;
 use ArPHP\I18N\Arabic;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
@@ -54,19 +55,16 @@ class TAndCDocumentController extends Controller
         $card_img = '';
         $plan_img = '';
 
-        if($request->land['qr_code']) {
+        if ($request->land['qr_code']) {
             $qr_img = $this->upload('public/uploads', $request->file('land.qr_code'));
-
         }
 
-        if($request->land['plan_img']) {
+        if ($request->land['plan_img']) {
             $plan_img = $this->upload('public/uploads', $request->file('land.plan_img'));
-
         }
 
-        if($request->land['card_img']) {
+        if ($request->land['card_img']) {
             $card_img = $this->upload('public/uploads', $request->file('land.card_img'));
-
         }
 
 
@@ -84,10 +82,10 @@ class TAndCDocumentController extends Controller
         $newTCD->save();
 
 
-        foreach($newTCDOriginal->sections as $section) {
+        foreach ($newTCDOriginal->sections as $section) {
 
             // intro
-            if($section->id == 4) {
+            if ($section->id == 4) {
                 $description = str_replace("{baladia_name}", $baladia_name, $section->description);
                 $description = str_replace("{district_name}", $request->land['district'] ?? '-', $description);
                 $description = str_replace("{planned}", $request->land['planned'] ?? '-', $description);
@@ -98,7 +96,7 @@ class TAndCDocumentController extends Controller
                 $new_section = $section->replicate();
                 $new_section->description = $description;
                 $new_section->document_id = $newTCD->id;
-            } else if ($section->id == 5 ) //location description
+            } else if ($section->id == 5) //location description
             {
                 $table_body = str_replace('{city}', $request->land['city'] ?? '-', $section->table_body);
                 $table_body = str_replace('{street}', $request->land['street'] ?? '-', $table_body);
@@ -119,7 +117,7 @@ class TAndCDocumentController extends Controller
                 $table_body = str_replace('{areaInWords}', $request->land['areaInWords'] ?? '-', $table_body);
                 $table_body = str_replace('{lat}', $request->land['lat'] ?? '-', $table_body);
                 $table_body = str_replace('{long}', $request->land['long'] ?? '-', $table_body);
-
+                $table_body = str_replace('{typee}', $type->name ?? '-', $table_body);
 
                 $newSec = $section->replicate();
                 $newSec->table_body = $table_body;
@@ -136,34 +134,29 @@ class TAndCDocumentController extends Controller
                 $newSec->document_id = $newTCD->id;
                 $newSec->save();
             }
-
-
-
         }
 
         return redirect()->route('tcd.index');
-
-
     }
 
 
-    public function print($id) {
+    public function print($id)
+    {
 
-        $doc = TAndCDocument::findOrFail( $id);
+        $doc = TAndCDocument::findOrFail($id);
         $docType = DocTypes::where('name', $doc->type_name)->first();
-        if(!empty($docType)) {
-            if($docType->has_theme == 0) {
+        if (!empty($docType)) {
+            if ($docType->has_theme == 0) {
                 return redirect()->back()->with('error', 'عفوا لا يوجد تصميم لهذا النوع');
             } else {
 
                 
-              GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf', Auth::user()->id);
-                return redirect()->back()->with('success', 'يتم الان انشاء الملف الخاص بكـ و سيتم ارسال الاشعار حين يكون مكتمل للتحميل');
+                  GeneratePDF::dispatch($doc, rand(1,99999999).'_'.$doc->mun_name .'_'.$doc->type_name.'_'.'.pdf', Auth::user()->id);
+                    return redirect()->back()->with('success', 'يتم الان انشاء الملف الخاص بكـ و سيتم ارسال الاشعار حين يكون مكتمل للتحميل');
             }
         } else {
             return redirect()->back()->with('error', 'عفوا لا يوجد تصميم لهذا النوع');
         }
-
     }
 
     public function downloadPDF($fileName)
@@ -185,23 +178,23 @@ class TAndCDocumentController extends Controller
      */
     public function show($id)
     {
-        return view('admin.documents.view')->with('doc' , TAndCDocument::findOrFail($id));
+        return view('admin.documents.view')->with('doc', TAndCDocument::findOrFail($id));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TAndCDocument $tAndCDocument)
+    public function edit($id)
     {
-        //
+        return view('admin.documents.update')->with('section' , DocumentSection::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TAndCDocument $tAndCDocument)
+    public function update(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

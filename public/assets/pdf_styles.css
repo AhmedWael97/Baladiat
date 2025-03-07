@@ -1,0 +1,268 @@
+@font-face {
+    font-family: theSans;
+    src: url('thesans.ttf');
+}
+@font-face {
+    font-family: theSansLight;
+    src: url('TheSansArabic-Light.ttf');
+}
+
+@page {
+    
+    text-align: rtl !important;
+    margin: 0 !important;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    size: A4;
+}
+
+* {
+    font-family: 'theSansLight' !important;
+    unicode-bidi: bidi-override;
+}
+
+body {
+    unicode-bidi: bidi-override;
+    text-align: right;
+}
+
+
+p,
+li {
+    font-family: 'theSansLight';
+    font-weight: bold;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'theSansLight';
+    
+}
+
+.mun_logo {
+    position: relative;
+}
+
+.mun_logo_img {
+    width: auto;
+    height: 100px;
+    top: 50px;
+    position: absolute;
+    margin: auto;
+    right: 0;
+    left: 0;
+}
+
+.page {
+    width: 210mm;
+    height: 297mm;
+    background: white;
+    
+    page-break-after: always;
+    /* يفصل كل صفحة عند الطباعة */
+}
+
+.page-sm {
+    width: 210mm;
+    height: 257mm;
+    background: white;
+    
+    page-break-after: always;
+    position: relative;
+}
+
+.full-width-image {
+    position: absolute;
+    left: 0;
+    right: 0;
+    align-items: center;
+    margin: auto;
+    width: 210mm;
+    height: 297mm;
+}
+
+
+
+.header {
+    position: relative;
+    margin: auto;
+    padding-top: 85mm;
+}
+
+.right-header {
+    position: relative;
+    top: 10mm;
+    right: 10mm;
+}
+
+.table_content {
+
+    margin: auto;
+    margin-top: 30mm;
+    margin-right:7mm;
+    margin-left: 5mm;
+    width: 190mm;
+}
+
+table {
+    width: 190mm;
+    font-family: 'theSansLight';
+    font-size: 11px;
+    border-collapse: collapse;
+}
+
+th {
+    border: solid;
+    border-width: 1px;
+    height: 30px;
+    background-color: #28889E;
+    color: white;
+    border-color: black;
+    border-width: 1px;
+}
+
+tr,
+td {
+    border: solid;
+    border-width: 1px;
+    height: 30px;
+    border-color: black;
+}
+
+.pr-1 {
+    padding-right: 15px;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-white {
+    color: white !important;
+}
+
+.text-blue {
+    color: #28889E !important;
+}
+
+.p-sm {
+    font-weight: lighter;
+}
+
+.mt-10 {
+    margin-top: 10mm;
+}
+
+.desc {
+    position: relative;
+    right: 1mm;
+    width: 150mm;
+    text-align: right;
+   
+
+}
+
+ul li {
+    color: white;
+    padding-top: 2mm;
+    padding-bottom: 2mm;
+    font-size: 9px;
+}
+
+.f-size-9 {
+    font-size: 9px;
+}
+
+.f-size-10 {
+    font-size: 9px;
+}
+
+.f-size-12 {
+    font-size: 12px;
+}
+
+.f-size-14 {
+    font-size: 14px;
+}
+
+.f-bold {
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 22.5px;
+}
+
+h2 {
+    font-size: 23.5px;
+}
+
+.pr-8 {
+    padding-right: 15mm;
+}
+
+.prePageTitle {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 220mm;
+}
+
+.sec_title {
+    font-size: 14px;
+}
+
+.sec_desc {
+    font-size: 11px;
+}
+
+.sub_sec {
+    font-size: 14px;
+}
+
+p {
+    font-size: 11px !important;
+}
+
+table tr {
+    text-align: center;
+}
+
+.spec_right {
+    position: absolute;
+    left: 0;
+    top: 0px;
+}
+
+@media print {
+    
+    @page {
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    
+
+    thead {
+        print-color-adjust: exact;
+    }
+}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,352 +9,76 @@
     <title>كراسة الشروط</title>
 
 
-    {{--
-    <link href="{{ public_path('/assets/print.css') }}" rel="stylesheet"> --}}
-    <style>
-        @font-face {
-            font-family: theSans;
-            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
-        }
 
-        @font-face {
-            font-family: theSansLight;
-            src: url('{{ storage_path("/app/public/TheSansArabic-Light.ttf") }}') format('truetype');
-        }
+    <link href="{{ public_path('/assets/pdf_styles.css') }}" rel="stylesheet">
 
-        @page {
-            direction: rtl !important;
-            text-align: rtl !important;
-            margin: 0;
-        }
-
-        * {
-            font-family: 'theSansLight' !important;
-            unicode-bidi: bidi-override;
-            direction: rtl;
-        }
-
-        body {
-            unicode-bidi: bidi-override;
-            direction: rtl;
-            text-align: right;
-        }
-
-        p {}
-
-        p,
-        li {
-            font-family: 'theSansLight';
-            font-weight: bold;
-            margin-bottom: 0 !important;
-            line-height: 10px;
-
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5 {
-            font-family: 'theSansLight';
-            line-height: 20px;
-        }
-
-        .mun_logo {
-            position: relative;
-        }
-
-        .mun_logo_img {
-            width: auto;
-            height: 100px;
-            top: 50px;
-            position: absolute;
-            margin: auto;
-            right: 0;
-            left: 0;
-        }
-
-        .page {
-            width: 210mm;
-            height: 297mm;
-            background: white;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            margin: 1mm;
-            page-break-after: always;
-            /* يفصل كل صفحة عند الطباعة */
-        }
-
-        .page-sm {
-            width: 210mm;
-            height: 257mm;
-            background: white;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            margin: 1mm;
-            page-break-after: always;
-            position: relative;
-        }
-
-        .full-width-image {
-            position: absolute;
-            left: 0;
-            right: 0;
-            align-items: center;
-            margin: auto;
-            width: 210mm;
-            height: 297mm;
-        }
-
-        .min_page {
-            height: 295mm !important;
-        }
-
-        .header {
-            position: relative;
-            margin: auto;
-            padding-top: 85mm;
-        }
-
-        .right-header {
-            position: relative;
-            top: 10mm;
-            right: 10mm;
-        }
-
-        .table_content {
-
-            margin: auto;
-            margin-top: 10mm;
-            margin-right:15mm;
-            margin-left:15mm;
-            width: 180mm;
-        }
-
-        table {
-            width: 190mm;
-            font-family: 'theSansLight';
-            font-size: 11px;
-            border-collapse: collapse;
-        }
-
-        th {
-            border: solid;
-            border-width: 1px;
-            height: 30px;
-            background-color: #28889E;
-            color: white;
-            border-color: black;
-            border-width: 1px;
-        }
-
-        tr,
-        td {
-            border: solid;
-            border-width: 1px;
-            height: 30px;
-            border-color: black;
-        }
-
-        .pr-1 {
-            padding-right: 1mm;
-        }
-
-        .text-center {
-            text-align: center !important;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .text-left {
-            text-align: left;
-        }
-
-        .text-white {
-            color: white !important;
-        }
-
-        .text-blue {
-            color: #28889E !important;
-        }
-
-        .p-sm {
-            font-weight: lighter;
-        }
-
-        .mt-10 {
-            margin-top: 10mm;
-        }
-
-        .desc {
-            position: relative;
-            right: 1mm;
-            width: 150mm;
-            text-align: right;
-            direction: rtl;
-
-        }
-
-        ul li {
-            color: white;
-            padding-top: 2mm;
-            padding-bottom: 2mm;
-            font-size: 9px;
-        }
-
-        .f-size-9 {
-            font-size: 9px;
-        }
-
-        .f-size-10 {
-            font-size: 9px;
-        }
-
-        .f-size-12 {
-            font-size: 12px;
-        }
-
-        .f-size-14 {
-            font-size: 14px;
-        }
-
-        .f-bold {
-            font-weight: bold;
-        }
-
-        h3 {
-            font-size: 22.5px;
-        }
-
-        h2 {
-            font-size: 23.5px;
-        }
-
-        .pr-8 {
-            padding-right: 8mm;
-        }
-
-        .prePageTitle {
-            text-align: center;
-            vertical-align: middle;
-            line-height: 220mm;
-        }
-
-        .sec_title {
-            font-size: 14px;
-        }
-
-        .sec_desc {
-            font-size: 11px;
-        }
-
-        .sub_sec {
-            font-size: 14px;
-        }
-
-        p {
-            font-size: 11px !important;
-        }
-
-        table tr {
-            text-align: center;
-        }
-
-        .spec_right {
-            position: absolute;
-            left: 0;
-            top: 0px;
-        }
-
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            .page,
-            .page-sm {
-                box-shadow: none;
-                page-break-after: always;
-            }
-
-            .full-width-image,
-            .cover-image {
-                page-break-before: always;
-            }
-
-            thead {
-                print-color-adjust: exact;
-            }
-        }
-    </style>
 </head>
 
 <body style="direction: rtl; text-align: right;">
     @php
 
-        $cover_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->cover_img)));
-        $page_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->page_img)));
+        $cover_img = url($doc->cover_img);
+        $page_img = url($doc->page_img);
         //$page_img = "";
     @endphp
     <div class="page cover">
         <div class="cover-image">
             <img src="{{ $cover_img }}" class="full-width-image" />
             <div class="header">
-                <h3 class="text-white text-center">
+                <h3 class="text-white text-center" style="font-size: 13px;">
                     {{ $doc->first_title }}
                 </h3>
-                <h3 class="text-white text-center">
+                <h3 class="text-white text-center" style="font-size: 15px;">
                     {{ $doc->mun_name }}
                 </h3>
-                <h2 class="text-blue text-center" style="direction: rtl; margin-bottom: 10px;">
+                <h2 class="text-blue text-center" style="direction: rtl; margin-bottom: 10px; font-size: 23.5px; ">
                     كراسة الشروط و المواصفات
                 </h2>
-                <h2 class="text-white text-center" style=" margin-bottom: 10px;">
+                <h2 class="text-white text-center" style=" margin-bottom: 10px; font-size: 22px;">
                     إنشاء و تشغيل وصيانة
                 </h2>
-                <h2 class="text-blue text-center" style=" margin-bottom: 10px;">
+                <h2 class="text-blue text-center" style=" margin-bottom: 10px; font-size: 23.5px;">
                     {{ $doc->type_name }}
                 </h2>
                 @php
                     $land = json_decode($doc->land_spec);
                 @endphp
-                <p class="text-white f-size-14 f-bold text-center" style="margin-bottom: 10px;">
-                    اسم الحي <span>({{ $land->district }})</span> - رقم المخطط <span>({{ $land->planned }})</span> - رقم
-                    القطعة <span>({{ $land->no }})</span>
+                <p class="text-white f-size-14 f-bold text-center" style="margin-bottom: 10px; font-size: 14px;">
+                    اسم الحي <span>({{ $land->district }})</span> - رقم المخطط <span>(<span dir="ltr" style="direction: ltr">{{ $land->planned }}</span>)</span> - رقم
+                    القطعة <span>(<span dir="ltr" style="direction: ltr">{{ $land->no }}</span>)</span>
                 </p>
 
-                <p class="text-white p-sm mt-10 f-size-12 text-center" style="margin-bottom: 10px;">
-                    المساحة ( {{ $land->area }} ) م2
+                <p class="text-white p-sm f-size-12 text-center" style="margin-bottom: 10px; font-size: 12px;">
+                    المساحة ( <span dir="ltr" style="direction: ltr">{{ $land->area }}</span> ) م2
                 </p>
 
-                <p class="text-white p-sm mt-10 text-center f-size-12" style="margin-bottom: 10px;">
+                <p class="text-white p-sm text-center f-size-12" style="margin-bottom: 10px; font-size: 12px;">
                     <span>رقم المنافسة </span>
                     <span>( ...................................... )</span>
-                    <span> لعام 1446 هـ </span>
+                    <span> لعام <span dir="ltr" style="direction: ltr"> 1446 </span> هـ </span>
                 </p>
             </div>
-            <div class="desc mt-10" style="text-align: right; direction :rtl">
-                <p class="text-white f-size-9" style="margin-bottom: 0px;">
+            <div class="desc mt-10 pr-8">
+                <p class="text-white f-size-9">
                     يقدم المستثمر عطاءه في المنافسة بإحدى الطرق الآتية:
                 </p>
-                <ul style="text-align: right; direction: rtl; margin-bottom: 5px;">
-                    <li style="text-align: right; direction: rtl; margin-bottom: 5px;">
-                        عن طريق الموقع الإلكتروني Furas.momra.gov.sa
+                <ul class=" f-size-9">
+                    <li class=" f-size-9">
+                        عن طريق الموقع الإلكتروني <span dir="ltr" style="direction: ltr">Furas.momra.gov.sa</span>
                     </li>
-                    <li style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                    <li class=" f-size-9">
                         عن طريق تطبيق الأجهزة الذكية "فرص"
                     </li>
-                    <li style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                    <li class=" f-size-9">
                         لن يقبل أي عطاء لم يتم تقديمه إلكترونياً
                     </li>
                 </ul>
 
-                <p class="text-white f-size-9 pr-8 " style="text-align: right; direction: rtl; margin-bottom: 5px;">
+                <p class="text-white f-size-9">
                     وفي حال تعذر تقديم العطاء عن طريق المنافسة الإلكترونية لأسباب فنية فيقدم العطاء عن طريق الظرف
                     المختوم باليد في موعد وتاريخ فتح المظاريف المعلن عنه شريطة تقديم ما يثبت وجود مشكلة فنية أثناء
                     التقديم على المنافسة الإلكترونية مع ضرورة تقديم بلاغ من خلال التواصل مع مركز الاتصال الوطني على
-                    الرقم (١٩٩040) .
+                    الرقم (<span dir="ltr" style="direction: ltr">١٩٩040</span>) .
                 </p>
             </div>
         </div>
@@ -364,14 +89,16 @@
         $total_sections = \App\Models\DocumentSection::where('document_id', $doc->id)->get();
         $sections_count = count($total_sections);
         $sections = [];
-        foreach ($total_sections as $section) {
-            $sec_arr = ['title' => $section->title, 'table_no' => $section->table_no, 'page_no' => $section->page_no];
+
+        foreach ($total_sections as $key => $section) {
+
+            $sec_arr = ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $section->title), 'table_no' => $section->table_no, 'page_no' => $section->page_no];
             array_push($sections, $sec_arr);
             if (!empty($section->sub_sections)) {
                 $sub_secs = json_decode($section->sub_sections);
                 $sections_count += count($sub_secs);
                 foreach ($sub_secs as $key => $subSec) {
-                    array_push($sections, ['title' => $subSec->title, 'table_no' => $section->table_no . '.' . ++$key, 'page_no' => $section->page_no + $key]);
+                    array_push($sections, ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $subSec->title), 'table_no' => $section->table_no . '.' . ++$key, 'page_no' => $section->page_no + $key]);
                 }
             }
         }
@@ -386,9 +113,9 @@
         <div class="page-sm table">
             <div class="cover-image">
                 <img src="{{ $page_img }}" class="full-width-image min_page" />
-                {{-- <div class="mun_logo">
+                <div class="mun_logo">
                     <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-                </div> --}}
+                </div>
                 <div class="right-header">
                     <p class="text-blue f-bold f-size-10">
                         كراسة الشروط والمواصفات
@@ -419,13 +146,13 @@
                         <tbody>
                             @foreach($array as $key => $element)
                                 <tr>
-                                    <td class="text-center" style="width: 10%">
+                                    <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
                                         {{ $element['table_no'] }}
                                     </td>
-                                    <td class="text-right pr-1" style="width: 80%">
+                                    <td class="text-right pr-1" style="width: 80%; padding-right: 15px;">
                                         {!!  str_replace(':', ' ', $element['title']) !!}
                                     </td>
-                                    <td class="text-center" style="width: 10%">
+                                    <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
                                         {{ $element['page_no'] }}
                                     </td>
                                 </tr>
@@ -446,20 +173,30 @@
                 if (count($sub_sec_array) >= 4) {
                     if ($section->prePageTitle == 'الاشتراطات الخاصة') {
                         $firstChunk = array_slice($sub_sec_array, 0, 2);
-                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 2), 1);
+                        $secChunk = array_slice($sub_sec_array, 2, 1);
+                        $thirdChunk = array_slice($sub_sec_array, 3, 1);
+                        $fourth = array_slice($sub_sec_array, 3, 2);
+                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 5), 5);
 
                     } else if ($section->prePageTitle == 'الاشتراطات العامة') {
                         $firstChunk = array_slice($sub_sec_array, 0, 8);
                         $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 8), 8);
                     } else if ($section->prePageTitle == 'الاشتراطات الفنية') {
-                        $firstChunk = array_slice($sub_sec_array, 0, 1);
-                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 1), 1);
+                        $firstChunk = array_slice($sub_sec_array, 0, 2);
+                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 2), 1);
                     } else {
                         $firstChunk = array_slice($sub_sec_array, 0, 5);
                         $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 5), 4);
 
                     }
                     $result = [$firstChunk];
+                    if (isset($secChunk)) {
+                        $result[] = $secChunk;
+                    }
+
+                    if (isset($fourth)) {
+                        $result[] = $fourth;
+                    }
                     $chunkSubSecs = array_merge($result, $chunkSubSecs);
                 } else {
                     $chunkSubSecs[] = json_decode($section->sub_sections);
@@ -524,7 +261,7 @@
 
                         <div class="table_content">
                             <h4 class="sec_title text-blue">
-                                {{ $section->table_no }} . {{ $section->title }} :
+                                <span dir="ltr" style="direction: ltr">{{ $section->table_no }}</span> . {{ $section->title }} :
                             </h4>
                             <p class="sec_desc" style="{{ empty($doc->notes) ? 'line-height: 20px' : '' }}">
                                 {!!  $section->description !!}
@@ -546,7 +283,8 @@
 
                                                 <tr>
                                                     @foreach($table_headers as $ilt => $header)
-                                                        <td class="{{ $ilt == 1 ? 'text-right pr-1' : 'text-center' }}">{!! $tb->$header ?? '' !!}
+                                                        <td class="{{ $ilt == 1 ? 'text-right pr-1' : 'text-center pr-1' }}"
+                                                            style="direction: {{ $header == 'م' ? 'ltr' : 'rtl' }}">{!! $tb->$header ?? '' !!}
                                                         </td>
                                                     @endforeach
                                                 </tr>
@@ -612,7 +350,7 @@
 
                     <div class="table_content">
                         <h4 class="sec_title text-blue">
-                            {{ $section->table_no }} . {{ $section->title }} :
+                            <span dir="ltr" style="direction: ltr"> {{ $section->table_no }}  </span>. {{ $section->title }} :
                         </h4>
                         <p class="sec_desc">
                             {!!  $section->description !!}
@@ -702,7 +440,7 @@
                             <div class="table_content">
 
                                 <h4 class="sec_title text-blue">
-                                    {{ $section->table_no }} . {{ $section->title }} :
+                                    <span dir="ltr" style="direction: ltr">{{ $section->table_no }}</span> . {{ $section->title }} :
                                 </h4>
 
 
@@ -778,10 +516,10 @@
             <div class="table_content">
 
                 <h4 class="sec_title text-blue">
-                    10 . المرفقات
+                    <span style="direction: ltr">10 .</span> المرفقات
                 </h4>
                 <p class="sec_title text-blue">
-                    1.10 نموذج عطاء يقدم إلكترونيا في المنافسة
+                    <span style="direction: ltr">1.10</span> نموذج عطاء يقدم إلكترونيا في المنافسة
                 </p>
 
                 <div class="table-content">
@@ -943,7 +681,7 @@
 
 
                 @php 
-                    $sketching_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->sketching_img)));
+                    $sketching_img = "data:image/png;base64," . base64_encode(file_get_contents(public_path($doc->sketching_img)));
                 @endphp
 
                 <img src="{{ $sketching_img }}" style="width: auto; height: 455px;" />
@@ -973,11 +711,11 @@
 
 
                 @php 
-                    $descripe_img = "data:image/jpg;base64," . base64_encode(file_get_contents(url($doc->descripe_img)));
+                    $descripe_img = "data:image/jpg;base64," . base64_encode(file_get_contents(public_path($doc->descripe_img)));
                 @endphp
 
                 <img src="{{ $descripe_img }}" style="width: auto;
-                    height: 750px;
+                    height: 600px;
                     position: absolute;
                     left: 0;
                     right: 0;

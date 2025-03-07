@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/printly/2', function () {
-    return view('print')->with('doc', TAndCDocument::findOrFail(7));
-});
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -41,6 +38,8 @@ Route::middleware('auth')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('print-document/{id}', 'print')->name('print-doc');
             Route::get('view/{id}', 'show')->name('view');
+            Route::get('edit/{id}', 'edit')->name('edit');
+            Route::get('update', 'update')->name('update');
         });
     });
 
