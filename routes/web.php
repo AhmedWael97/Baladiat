@@ -7,8 +7,7 @@ use App\Http\Controllers\TAndCDocumentController;
 use App\Models\TAndCDocument;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -51,5 +50,29 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit/{id}', 'edit')->name('edit');
             Route::get('/destroy/{id}', 'destroy')->name('delete');
         });
+    });
+
+
+    Route::get('/download-file/{file_name}', function($file_name) {
+        foreach(Auth::user()->notifications()->get() as $notification) {
+            $notification->read_at = now();
+            $notification->save();
+        }
+        
+        return response()->download(Storage::disk('public')->path($file_name));
+    });
+
+    Route::get('new_notification', function() {
+        if(Auth::user()->notifications()->where('read_at', null)->count() >= 1){
+            return [
+                "found" => 1,
+                "data" => view('admin.notifications')->render(),
+            ];
+        } else {
+            return [
+                "found" => 0,
+                "data" => []
+            ];
+        }
     });
 });
