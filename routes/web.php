@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MunicipalitiesController;
+use App\Http\Controllers\DocTypesController;
 use App\Http\Controllers\TAndCDocumentController;
 use App\Models\TAndCDocument;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,17 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(MunicipalitiesController::class)->group(function () {
         Route::prefix('municipalities')->as('mun.')->group(function () {
+            Route::get('index', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::get('/destroy/{id}', 'destroy')->name('delete');
+        });
+    });
+
+    Route::controller(DocTypesController::class)->group(function () {
+        Route::prefix('docType')->as('doc.')->group(function () {
             Route::get('index', 'index')->name('index');
             Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
