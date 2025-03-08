@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MunicipalitiesController;
+use App\Http\Controllers\DocTypesController;
 use App\Http\Controllers\TAndCDocumentController;
 use App\Models\TAndCDocument;
 use Illuminate\Support\Facades\Auth;
@@ -54,17 +55,17 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    Route::get('/download-file/{file_name}', function($file_name) {
-        foreach(Auth::user()->notifications()->get() as $notification) {
+    Route::get('/download-file/{file_name}', function ($file_name) {
+        foreach (Auth::user()->notifications()->get() as $notification) {
             $notification->read_at = now();
             $notification->save();
         }
-        
+
         return response()->download(Storage::disk('public')->path($file_name));
     });
 
-    Route::get('new_notification', function() {
-        if(Auth::user()->notifications()->where('read_at', null)->count() >= 1){
+    Route::get('new_notification', function () {
+        if (Auth::user()->notifications()->where('read_at', null)->count() >= 1) {
             return [
                 "found" => 1,
                 "data" => view('admin.notifications')->render(),
@@ -75,5 +76,15 @@ Route::middleware('auth')->group(function () {
                 "data" => []
             ];
         }
+    });
+    Route::controller(DocTypesController::class)->group(function () {
+        Route::prefix('docType')->as('doc.')->group(function () {
+            Route::get('index', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/update', 'update')->name('update');
+            Route::get('/destroy/{id}', 'destroy')->name('delete');
+        });
     });
 });

@@ -61,6 +61,24 @@
   </li>
 
 
+ <!-- Heading -->
+ <div class="sidebar-heading">
+    انواع الملفات
+  </div>
+
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('doc.index') }}">
+      <i class="fas fa-fw fa-file"></i>
+      <span>كل الانواع</span></a>
+  </li>
+
+  <!-- Nav Item - Dashboard -->
+  <li class="nav-item">
+    <a class="nav-link" href="{{  route('doc.create')  }}">
+      <i class="fas fa-fw fa-plus-circle"></i>
+      <span>إضافة نوع جديد</span></a>
+  </li>
 
 
   <!-- Divider -->
