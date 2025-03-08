@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">لوجو البلديه</label>
+                                <label for="">شعار البلدية</label>
                                 <input type="file" class="form-control m-4" name="logo" />
                             </div>
                         </div> 

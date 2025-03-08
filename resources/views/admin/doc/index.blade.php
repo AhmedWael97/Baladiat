@@ -18,7 +18,7 @@
         <thead>
             <th>#</th>
             <th>اسم نوع الملف</th>
-            <th> لديه شكل </th>
+            <th> لديه تصميم </th>
             <th> العمليات </th>
         </thead>
         @foreach($docs as $key => $doc)

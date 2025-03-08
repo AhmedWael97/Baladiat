@@ -20,10 +20,10 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="">يحتوي علي شكل معين ؟</label>
+                                <label for="">يحتوي علي تصميم ؟</label>
                                 <select name="has_theme" id="" class="form-control m-4">
-                                    <option value="0">لا يحتوي علي اي اشكال معينه</option>
-                                    <option value="1">يحتوي علي شكل معين</option>
+                                    <option value="0">لا يحتوي </option>
+                                    <option value="1">يحتوي</option>
                                 </select>
                             </div>
                         </div> 

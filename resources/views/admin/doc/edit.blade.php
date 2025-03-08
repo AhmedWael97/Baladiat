@@ -29,10 +29,10 @@
                     </div>      
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="">يحتوي علي شكل معين ؟</label>
+                            <label for="">يحتوي علي تصميم ؟</label>
                             <select name="has_theme" id="" class="form-control m-4">
-                                <option value="0" @if($doc->has_theme == 0) selected @endif>لا يحتوي علي اي اشكال معينه</option>
-                                <option value="1" @if($doc->has_theme == 1) selected @endif>يحتوي علي شكل معين</option>
+                                <option value="0" @if($doc->has_theme == 0) selected @endif>لا يحتوي</option>
+                                <option value="1" @if($doc->has_theme == 1) selected @endif>يحتوي</option>
                             </select>
                         </div>
                     </div>  
