@@ -10,7 +10,7 @@
 
 
 
-    <link href="{{ public_path('/assets/pdf_styles.css') }}" rel="stylesheet">
+    <link href="{{ url('/assets/pdf_styles.css') }}" rel="stylesheet">
 
 </head>
 
@@ -683,7 +683,7 @@
 
 
                 @php 
-                    $sketching_img = "data:image/png;base64," . base64_encode(file_get_contents(public_path($doc->sketching_img)));
+                    $sketching_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->sketching_img)));
                 @endphp
 
                 <img src="{{ $sketching_img }}" style="width: auto; height: 455px;" />
@@ -713,7 +713,7 @@
 
 
                 @php 
-                    $descripe_img = "data:image/jpg;base64," . base64_encode(file_get_contents(public_path($doc->descripe_img)));
+                    $descripe_img = "data:image/jpg;base64," . base64_encode(file_get_contents(url($doc->descripe_img)));
                 @endphp
 
                 <img src="{{ $descripe_img }}" style="width: auto;
