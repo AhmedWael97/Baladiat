@@ -17,8 +17,9 @@
 <body style="direction: rtl; text-align: right;">
     @php
 
-        $cover_img = url($doc->cover_img);
-        $page_img = url($doc->page_img);
+
+        $cover_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->cover_img)));
+        $page_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->page_img)));
         //$page_img = "";
     @endphp
     <div class="page cover">
@@ -44,7 +45,8 @@
                     $land = json_decode($doc->land_spec);
                 @endphp
                 <p class="text-white f-size-14 f-bold text-center" style="margin-bottom: 10px; font-size: 14px;">
-                    اسم الحي <span>({{ $land->district }})</span> - رقم المخطط <span>(<span dir="ltr" style="direction: ltr">{{ $land->planned }}</span>)</span> - رقم
+                    اسم الحي <span>({{ $land->district }})</span> - رقم المخطط <span>(<span dir="ltr"
+                            style="direction: ltr">{{ $land->planned }}</span>)</span> - رقم
                     القطعة <span>(<span dir="ltr" style="direction: ltr">{{ $land->no }}</span>)</span>
                 </p>
 
@@ -350,7 +352,7 @@
 
                     <div class="table_content">
                         <h4 class="sec_title text-blue">
-                            <span dir="ltr" style="direction: ltr"> {{ $section->table_no }}  </span>. {{ $section->title }} :
+                            <span dir="ltr" style="direction: ltr"> {{ $section->table_no }} </span>. {{ $section->title }} :
                         </h4>
                         <p class="sec_desc">
                             {!!  $section->description !!}
