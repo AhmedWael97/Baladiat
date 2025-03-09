@@ -10,7 +10,7 @@
 
 
 
-    <link href="{{ url('/assets/pdf_styles.css') }}" rel="stylesheet">
+    <link href="{{ public_path('/assets/pdf_styles.css') }}" rel="stylesheet">
     
     <style>
         .page, .page-sm {
@@ -27,8 +27,8 @@
     @php
 
 
-        $cover_img = url($doc->cover_img);
-        $page_img = url($doc->page_img);
+        $cover_img = public_path($doc->cover_img);
+        $page_img = public_path($doc->page_img);
         $page_no = 0;
         //$page_img = "";
     @endphp

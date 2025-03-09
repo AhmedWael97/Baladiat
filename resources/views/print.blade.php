@@ -10,7 +10,7 @@
 
 
 
-    <link href="{{ url('/assets/pdf_styles.css') }}" rel="stylesheet">
+    <link href="{{ public_path('/assets/pdf_styles.css') }}" rel="stylesheet">
     
    
 </head>
@@ -19,8 +19,8 @@
     @php
 
 
-        $cover_img = url($doc->cover_img);
-        $page_img = url($doc->page_img);
+        $cover_img = public_path($doc->cover_img);
+        $page_img = public_path($doc->page_img);
         $page_no = 0;
         //$page_img = "";
     @endphp
@@ -736,7 +736,7 @@
 
 
                 @php 
-                    $sketching_img = url($doc->sketching_img);
+                    $sketching_img = public_path($doc->sketching_img);
                 @endphp
 
                 <img src="{{ $sketching_img }}" style="width: auto; height: 455px;" />
@@ -772,7 +772,7 @@
 
 
                 @php 
-                    $descripe_img = url($doc->descripe_img);
+                    $descripe_img = public_path($doc->descripe_img);
                 @endphp
 
                 <img src="{{ $descripe_img }}" style="width: auto;
