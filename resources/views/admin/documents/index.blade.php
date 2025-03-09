@@ -60,6 +60,10 @@
                         <a href="{{ route('tcd.view', $tcd->id) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i>
                         </a>
+
+                        <a href="{{ route('tcd.delete', $tcd->id) }}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>
                         
                     </td>
                 </tr>

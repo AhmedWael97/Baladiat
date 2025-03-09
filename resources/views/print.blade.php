@@ -11,15 +11,17 @@
 
 
     <link href="{{ url('/assets/pdf_styles.css') }}" rel="stylesheet">
-
+    
+   
 </head>
 
 <body style="direction: rtl; text-align: right;">
     @php
 
 
-        $cover_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->cover_img)));
-        $page_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->page_img)));
+        $cover_img = url($doc->cover_img);
+        $page_img = url($doc->page_img);
+        $page_no = 0;
         //$page_img = "";
     @endphp
     <div class="page cover">
@@ -162,6 +164,13 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="page-footer text-blue">
+                    الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+                </div>
+                <div class="text-footer text-blue">
+                    المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+                </div>
             </div>
         </div>
     @endforeach
@@ -204,7 +213,7 @@
                     $chunkSubSecs[] = json_decode($section->sub_sections);
                 }
             }
-
+            $sec_page_no = 0;
         @endphp
 
         @if($section->hasPrePage == 1)
@@ -227,6 +236,12 @@
                         <h1 class="prePageTitle text-blue">
                             {{ $section->prePageTitle }}
                         </h1>
+                    </div>
+                    <div class="page-footer text-blue">
+                        الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+                    </div>
+                    <div class="text-footer text-blue">
+                        المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
                     </div>
                 </div>
             </div>
@@ -309,10 +324,10 @@
                                     @foreach($sub_sec as $sec)
                                         <div class="sub_sec">
                                             <h4 class="sec_title text-blue" style="margin: 5px">
-                                                {!! $sec->title !!}
+                                                 {!! $sec->title !!}
                                             </h4>
                                             <div class="sec_desc" style="margin: 5px">
-                                                {!! $sec->content !!}
+                                                {!! $sec->content == '' ? '..................................................................................................................................................................' : $sec->content !!}
                                             </div>
                                         </div>
                                     @endforeach
@@ -330,12 +345,19 @@
                             @endif
 
                         </div>
+                        <div class="page-footer text-blue">
+                            الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+                        </div>
+                        <div class="text-footer text-blue">
+                            المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+                        </div>
                     </div>
                 </div>
+               
             @endforeach
         @else
 
-            <div class="page-sm table">
+            <div class="page-sm table" >
                 <div class="cover-image">
                     <img src="{{ $page_img }}" class="full-width-image min_page" />
                     <div class="mun_logo">
@@ -350,7 +372,7 @@
                         </p>
                     </div>
 
-                    <div class="table_content">
+                    <div class="table_content" style="margin-top:15mm">
                         <h4 class="sec_title text-blue">
                             <span dir="ltr" style="direction: ltr"> {{ $section->table_no }} </span>. {{ $section->title }} :
                         </h4>
@@ -395,12 +417,14 @@
                                     @foreach($sub_sec as $sec)
                                         <div class="sub_sec">
                                             <h4 class="sec_title text-blue">
-                                                {!! $sec->title !!}
+                                                <span dir="ltr" style="direction: ltr; margin-left: 5px;"> {{  $section->table_no }} . {{ ++$sec_page_no  . ' '}} </span>   {!! $sec->title !!}
+                                               
                                             </h4>
                                             <p class="sec_desc">
                                                 {!! $sec->content !!}
                                             </p>
                                         </div>
+                                        
                                     @endforeach
                                 @endif
 
@@ -417,6 +441,12 @@
                         @endif
 
                     </div>
+                    <div class="page-footer text-blue">
+                        الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+                    </div>
+                    <div class="text-footer text-blue">
+                        المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+                    </div>
                 </div>
             </div>
         @endif
@@ -424,7 +454,7 @@
         @if(count($chunkSubSecs) > 1)
             @foreach($chunkSubSecs as $key => $subSec)
                 @if($key != 0)
-                    <div class="page-sm table">
+                    <div class="page-sm table" >
                         <div class="cover-image">
                             <img src="{{ $page_img }}" class="full-width-image min_page" />
                             <div class="mun_logo">
@@ -439,7 +469,7 @@
                                 </p>
                             </div>
 
-                            <div class="table_content">
+                            <div class="table_content" style="margin-top:15mm">
 
                                 <h4 class="sec_title text-blue">
                                     <span dir="ltr" style="direction: ltr">{{ $section->table_no }}</span> . {{ $section->title }} :
@@ -449,21 +479,30 @@
                                 @if(!empty($section->sub_sections))
 
 
-                                    @foreach($subSec as $sec)
+                                    @foreach($subSec as $key => $sec)
                                         <div class="sub_sec">
                                             <h4 class="sec_title text-blue">
-                                                {!! $sec->title !!}
+                                                <span dir="ltr" style="direction: ltr; margin-left: 5px;"> {{  $section->table_no }} . {{ ++$sec_page_no . ' ' }} </span>    {!! $sec->title !!}
                                             </h4>
                                             <p class="sec_desc">
                                                 {!! $sec->content !!}
                                             </p>
                                         </div>
+                                       
+
                                     @endforeach
 
                                 @endif
 
 
 
+                            </div>
+
+                            <div class="page-footer text-blue">
+                                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+                            </div>
+                            <div class="text-footer text-blue">
+                                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
                             </div>
                         </div>
                     </div>
@@ -496,6 +535,13 @@
                 <h1 class="prePageTitle text-blue">
                     المرفقات
                 </h1>
+            </div>
+
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
             </div>
         </div>
     </div>
@@ -657,6 +703,13 @@
 
 
             </div>
+
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+            </div>
         </div>
     </div>
 
@@ -678,15 +731,21 @@
             </div>
             <div class="table_content">
                 <h4 class="text-blue">
-                    2.10 المخطط العام للموقع
+                    <span dir="ltr" style="direction: ltr; margin-left:5px;">2.10</span> المخطط العام للموقع
                 </h4>
 
 
                 @php 
-                    $sketching_img = "data:image/png;base64," . base64_encode(file_get_contents(url($doc->sketching_img)));
+                    $sketching_img = url($doc->sketching_img);
                 @endphp
 
                 <img src="{{ $sketching_img }}" style="width: auto; height: 455px;" />
+            </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
             </div>
         </div>
     </div>
@@ -713,7 +772,7 @@
 
 
                 @php 
-                    $descripe_img = "data:image/jpg;base64," . base64_encode(file_get_contents(url($doc->descripe_img)));
+                    $descripe_img = url($doc->descripe_img);
                 @endphp
 
                 <img src="{{ $descripe_img }}" style="width: auto;
@@ -722,6 +781,12 @@
                     left: 0;
                     right: 0;
                     margin: auto;" />
+            </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
             </div>
         </div>
     </div>
@@ -743,7 +808,7 @@
             </div>
             <div class="table_content">
                 <h4 class="text-blue">
-                    3.10 نموذج محضر تسليم عقار للمستثمر:
+                    <span dir="ltr" style="direction: ltr">3.10<span> نموذج محضر تسليم عقار للمستثمر:
                 </h4>
                 <table>
                     <tr>
@@ -833,6 +898,12 @@
 
 
             </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+            </div>
         </div>
     </div>
 
@@ -900,6 +971,12 @@
                     التوقيع :
                 </p>
             </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+            </div>
         </div>
     </div>
 
@@ -920,7 +997,7 @@
             </div>
             <div class="table_content">
                 <h4 class="sec_title text-blue">
-                    5.10 نموذج العقـــد:
+                    <span dir="ltr" style="direction: ltr">5.10</span> نموذج العقـــد:
                 </h4>
                 <div class="tex-right spec_right">
                     رقم العقد: ..................................
@@ -967,6 +1044,12 @@
                     بياناته، فقد اتفق الطرفان على ما يلي:
 
                 </p>
+            </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
             </div>
         </div>
     </div>
@@ -1090,6 +1173,12 @@
                     </tr>
                 </table>
 
+            </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
             </div>
         </div>
     </div>
@@ -1222,6 +1311,12 @@
                     </tr>
                 </table>
             </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
+            </div>
         </div>
     </div>
 
@@ -1342,6 +1437,12 @@
                     واحتفظ الطرف الأول بنسختين.
 
                 </p>
+            </div>
+            <div class="page-footer text-blue">
+                الصفحة رقم (<span dir="ltr" style="direction: ltr; margin-right: 5px; margin-left: 5px;">{{ ++$page_no }}</span>)
+            </div>
+            <div class="text-footer text-blue">
+                المنافسة رقم (  .... .... ....  ) لعام <span dir="ltr">1446</span> هـ - الإصدار رقم 1
             </div>
         </div>
     </div>

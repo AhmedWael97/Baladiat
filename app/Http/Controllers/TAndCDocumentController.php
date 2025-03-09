@@ -104,7 +104,7 @@ class TAndCDocumentController extends Controller
                 $table_body = str_replace('{baladia}', $baladia_name ?? '-', $table_body);
                 $table_body = str_replace('{district}', $request->land['district'] ?? '-', $table_body);
                 $table_body = str_replace('{land_no}', $request->land['no'] ?? '-', $table_body);
-                $table_body = str_replace('{qr_code}', $qr_img ?? '-', $table_body);
+                $table_body = str_replace('{qr_code}', url($qr_img) ?? '-', $table_body);
                 $table_body = str_replace('{north}', $request->land['north'] ?? '-', $table_body);
                 $table_body = str_replace('{northLen}', $request->land['north_len'] ?? '-', $table_body);
                 $table_body = str_replace('{south}', $request->land['south'] ?? '-', $table_body);
@@ -117,7 +117,7 @@ class TAndCDocumentController extends Controller
                 $table_body = str_replace('{areaInWords}', $request->land['areaInWords'] ?? '-', $table_body);
                 $table_body = str_replace('{lat}', $request->land['lat'] ?? '-', $table_body);
                 $table_body = str_replace('{long}', $request->land['long'] ?? '-', $table_body);
-                $table_body = str_replace('{typee}', $type->name ?? '-', $table_body);
+                $table_body = str_replace('{doc_type}', $type->name ?? '-', $table_body);
 
                 $newSec = $section->replicate();
                 $newSec->table_body = $table_body;
@@ -178,7 +178,7 @@ class TAndCDocumentController extends Controller
      */
     public function show($id)
     {
-        return view('admin.documents.view')->with('doc', TAndCDocument::findOrFail($id));
+        return view('admin.pdf.template1')->with('doc', TAndCDocument::findOrFail($id));
     }
 
     /**
@@ -200,8 +200,11 @@ class TAndCDocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TAndCDocument $tAndCDocument)
+    public function destroy($id)
     {
-        //
+        DocumentSection::where('document_id', $id)->delete();
+        TAndCDocument::where('id', $id)->delete();
+
+        return redirect()->route('tcd.index')->with('success', 'تم حذف الكراسة بنجاح');
     }
 }
