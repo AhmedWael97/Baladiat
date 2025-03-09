@@ -12,17 +12,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 
-function wrapEnglishWords($text)
-{
-    return preg_replace_callback('/\b[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*\b/', function ($matches) {
-        return "<span dir='ltr' style='direction: ltr'>{$matches[0]}</span>";
-    }, $text);
-}
+// function wrapEnglishWords($text)
+// {
+//     return preg_replace_callback('/\b[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*\b/', function ($matches) {
+//         return "<span dir='ltr' style='direction: ltr'>{$matches[0]}</span>";
+//     }, $text);
+// }
 
-function addNewLineBeforeNumberedSpans($text)
-{
-    return preg_replace('/(?<!\n)(<span dir=[\'"]ltr[\'"] style=[\'"]direction: ltr[\'"]>\d+\.\d+\.\d+<\/span>)/', "<br>$1", $text);
-}
+// function addNewLineBeforeNumberedSpans($text)
+// {
+//     return preg_replace('/(?<!\n)(<span dir=[\'"]ltr[\'"] style=[\'"]direction: ltr[\'"]>\d+\.\d+\.\d+<\/span>)/', "<br>$1", $text);
+// }
 
 // Route::get('/adding-br', function () {
    
