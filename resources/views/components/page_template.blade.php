@@ -7,7 +7,7 @@
     <div class="cover-image">
         <img src="{{ $page_img }}" class="full-width-image min_page" />
         <div class="mun_logo">
-            <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
+            <img src="{{ public_path($doc->mun_logo) }}" class="mun_logo_img" />
         </div>
         <div class="right-header">
             <p class="text-blue f-bold f-size-10">
