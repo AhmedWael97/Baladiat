@@ -21,6 +21,7 @@
 
         $cover_img = public_path($doc->cover_img);
         $page_img = public_path($doc->page_img);
+        $mun_img = public_path($doc->mun_logo);
         $page_no = 0;
         //$page_img = "";
     @endphp
@@ -90,22 +91,9 @@
     </div>
     @php
         $array_chunks = [];
-        $total_sections = \App\Models\DocumentSection::where('document_id', $doc->id)->get();
-        $sections_count = count($total_sections);
-        $sections = [];
+        $sections = json_decode($doc->table_content);
 
-        foreach ($total_sections as $key => $section) {
-
-            $sec_arr = ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $section->title), 'table_no' => $section->table_no, 'page_no' => $section->page_no];
-            array_push($sections, $sec_arr);
-            if (!empty($section->sub_sections)) {
-                $sub_secs = json_decode($section->sub_sections);
-                $sections_count += count($sub_secs);
-                foreach ($sub_secs as $key => $subSec) {
-                    array_push($sections, ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $subSec->title), 'table_no' => $section->table_no . '.' . ++$key, 'page_no' => $section->page_no + $key]);
-                }
-            }
-        }
+       
 
         if (count($sections) >= 23) {
             $array_chunks = array_chunk($sections, 23);
@@ -149,17 +137,17 @@
                         </thead>
                         <tbody>
                             @foreach($array as $key => $element)
-                                <tr>
-                                    <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
-                                        {{ $element['table_no'] }}
-                                    </td>
-                                    <td class="text-right pr-1" style="width: 80%; padding-right: 15px;">
-                                        {!!  str_replace(':', ' ', $element['title']) !!}
-                                    </td>
-                                    <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
-                                        {{ $element['page_no'] }}
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
+                                    {{ $element->table_no }}
+                                </td>
+                                <td class="text-right pr-1" style="width: 80%; padding-right: 15px;">
+                                    {!!  str_replace(':', ' ', $element->title) !!}
+                                </td>
+                                <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
+                                    {{ $element->page_no }}
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -516,12 +504,57 @@
 
     @endforeach
 
+    @include('print.section_6',['doc' => $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+    
+    @php
+        $page_no = 10;
+    @endphp
+
+    @include('print.section_7', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+
+    @php
+        $page_no = 12;
+    @endphp
+
+
+    @include('print.section_8', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+    @php
+        $page_no = 12;
+    @endphp
+
+    @include('print.section_9', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+    
+    @php
+        $page_no = 14;
+    @endphp
+
+    @include('print.section_10', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+    @php
+        $page_no = 19;
+    @endphp
+
+    @include('print.section_11', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+    
+    @php
+        $page_no = 23;
+    @endphp
+
+    @include('print.section_12', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+    
+    @php
+        $page_no = 30;  
+    @endphp
+
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -549,9 +582,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -624,7 +657,7 @@
                     </table>
                     <p>
                         وتجدون برفقه كراسة الشروط والمواصفات بعد توقيع جميع صفحاتها من قبلنا وضمان بنكي بقيمة لا تقل عن
-                        (25 %) من العطاء السنوي وكافة المستندات المطلوبة في كراسة الشروط والمواصفات.
+                        <span dir="ltr" style="direction: ltr">(25 %)</span> من العطاء السنوي وكافة المستندات المطلوبة في كراسة الشروط والمواصفات.
                     </p>
                     <table>
                         <tr>
@@ -718,9 +751,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div>
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -754,9 +787,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -795,9 +828,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -826,7 +859,7 @@
                     </tr>
                     <tr>
                         <td style="width: 25%">
-                            التاريخ: / / 14 هـ
+                            التاريخ: / / <span dir="ltr" style="direction: ltr">14</span> هـ
                         </td>
                         <td colspan="3">
 
@@ -878,7 +911,7 @@
                 <p>
                     أقر بأنني قد استلمت بموجب هذا المحضر العقار المذكورة بياناته عالية
                     ........................................
-                    بتاريخ / / 14 هـ لاستخدامه في إقامة وإدارة وتشغيل سوق تجاري بموجب عقد الإيجار المبرم مع بلدية
+                    بتاريخ / / <span dir="ltr" style="direction: ltr">14</span> هـ لاستخدامه في إقامة وإدارة وتشغيل سوق تجاري بموجب عقد الإيجار المبرم مع بلدية
                     ............................. وقد قمت بمعاينته معاينه تامة نافية للجهالة شرعاً وبأنني قبلته على
                     حالته في تاريخ استلامه.
                     (ويشمل ذلك الأرض والموقع والمنشآت والملحقات وأية تجهيزات أخري)
@@ -911,9 +944,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -932,28 +965,28 @@
                         <p> يحق للبلدية تقدير قيمة العائد الاستثماري للأسواق وفقاً للأسعار السائدة للسوق العقاري.</p>
                     </li>
                     <li style="color:black; padding:0">
-                        <p> اطلع على لائحة التصرف بالعقارات البلدية الصادرة بموجب الأمر السامي الكريم رقم (40152) بتاريخ
-                            29/06/1441 هـ وتعليماتها التنفيذية الصادرة بالقرار الوزاري رقم (4100561883) وتاريخ
-                            22/12/1441 هـ والقرارات والتعاميم ذات الصلة.</p>
+                        <p> اطلع على لائحة التصرف بالعقارات البلدية الصادرة بموجب الأمر السامي الكريم رقم <span dir="ltr" style="direction: ltr">(40152)</span> بتاريخ
+                            <span dir="ltr" style="direction: ltr">29/06/1441</span> هـ وتعليماتها التنفيذية الصادرة بالقرار الوزاري رقم <span dir="ltr" style="direction: ltr">(4100561883)</span> وتاريخ
+                            <span dir="ltr" style="direction: ltr">22/12/1441</span> هـ والقرارات والتعاميم ذات الصلة.</p>
                     </li>
                     <li style="color:black; padding:0">
-                        <p> اطلع على لائحة الغرامات والجزاءات البلدية الصادرة بقرار مجلس الوزارء الموقر رقم (92) وتاريخ
-                            05/02/1442 هـ والقرار الوزاري رقم (4300204526) وتاريخ 12/03/1443 هـ المبلغ به القواعد
+                        <p> اطلع على لائحة الغرامات والجزاءات البلدية الصادرة بقرار مجلس الوزارء الموقر رقم <span dir="ltr" style="direction: ltr">(92)</span> وتاريخ
+                            05/02/1442 هـ والقرار الوزاري رقم <span dir="ltr" style="direction: ltr">(4300204526)</span> وتاريخ <span dir="ltr" style="direction: ltr">12/03/1443</span> هـ المبلغ به القواعد
                             التنفيذية للائحة الجزاءات عن المخالفات البلدية وجدول المخالفات والجزاءات البلدية الصادرة عن
-                            وزارة البلديات والإسكان رقم ( 1/٤٤۰۰۹۰٥٨٥٤) وتاريخ 26/11/1444 هـ وما يستجد عليها من تعديلات
+                            وزارة البلديات والإسكان رقم <span dir="ltr" style="direction: ltr">( 1/٤٤۰۰۹۰٥٨٥٤)</span> وتاريخ <span dir="ltr" style="direction: ltr">26/11/1444</span> هـ وما يستجد عليها من تعديلات
                             أو تحديثات.</p>
                     </li>
                     <li style="color:black; padding:0">
                         <p> اطلع على اشتراطات المجمعات التجارية والأسواق الشعبية وما في حكمها الصادرة بالقرار الوزاري
-                            رقم (1/4600315690) وتاريخ 02/06/1446هـ وما يستجد عليها من تعديلات أو تحديثات.</p>
+                            رقم <span dir="ltr" style="direction: ltr">(1/4600315690)</span> وتاريخ <span dir="ltr" style="direction: ltr">02/06/1446</span> هـ وما يستجد عليها من تعديلات أو تحديثات.</p>
                     </li>
                     <li style="color:black; padding:0">
                         <p> اطلع على اشتراطات البقالات والتموينات والأسواق المركزية وما في حكمها الصادرة بالقرار الوزاري
-                            رقم (57534) وتاريخ 19/11/1440هـ وما يستجد عليها من تعديلات أو تحديثات.</p>
+                            رقم <span dir="ltr" style="direction: ltr">(57534)</span> وتاريخ 19/11/1440هـ وما يستجد عليها من تعديلات أو تحديثات.</p>
                     </li>
                     <li style="color:black; padding:0">
                         <p> اطلع على اشتراطات اللوحات التجارية العامة الصادرة بتعميم معالي وزير البلديات والإسكان رقم
-                            (1/4200079475) وتاريخ 26/02/1442 هـ وما يستجد عليها من تعديلات مستقبلية.</p>
+                            <span dir="ltr" style="direction: ltr">(1/4200079475)</span> وتاريخ <span dir="ltr" style="direction: ltr">26/02/1442</span> هـ وما يستجد عليها من تعديلات مستقبلية.</p>
                     </li>
                     <li style="color:black; padding:0">
                         <p> عاين الموقع معاينة تامة نافية للجهالة.</p>
@@ -984,9 +1017,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1058,9 +1091,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1187,9 +1220,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1324,9 +1357,9 @@
     <div class="page-sm table">
         <div class="cover-image">
             <img src="{{ $page_img }}" class="full-width-image min_page" />
-            {{-- <div class="mun_logo">
+             <div class="mun_logo">
                 <img src="{{ url($doc->mun_logo) }}" class="mun_logo_img" />
-            </div> --}}
+            </div> 
             <div class="right-header">
                 <p class="text-blue f-bold f-size-10">
                     كراسة الشروط والمواصفات
@@ -1403,9 +1436,9 @@
                     <tr>
                         <td> </td>
                         <td>فيما لم يرد فيه نص في هذا العقد تسري أحكام لائحة التصرف بالعقارات البلدية المُحدثة الصادرة
-                            بموجب الأمر السامي رقم (40152) وتاريخ 29/06/1441 هـ وتحديثاتها المعدلة بتاريخ 18/07/1442 هـ
-                            ورقم (48843) وتاريخ 26/08/1442 هـ وتعليماتها التنفيذية الصادرة بالقرار الوزاري رقم
-                            (4100561883) وتاريخ 22/12/1441 هـ.</td>
+                            بموجب الأمر السامي رقم <span dir="ltr" style="direction: ltr">(40152)</span> وتاريخ <span dir="ltr" style="direction: ltr">29/06/1441</span> هـ وتحديثاتها المعدلة بتاريخ <span dir="ltr" style="direction: ltr">18/07/1442</span> هـ
+                            ورقم <span dir="ltr" style="direction: ltr">(48843)</span> وتاريخ <span dir="ltr" style="direction: ltr">26/08/1442</span> هـ وتعليماتها التنفيذية الصادرة بالقرار الوزاري رقم
+                            <span dir="ltr" style="direction: ltr">(4100561883)</span> وتاريخ <span dir="ltr" style="direction: ltr">22/12/1441</span> هـ.</td>
                     </tr>
                     <tr>
                         <th>المادة السابعة عشر</th>

@@ -97,25 +97,12 @@
 
     </div>
     @php
-        $array_chunks = [];
-        $total_sections = \App\Models\DocumentSection::where('document_id', $doc->id)->get();
-        $sections_count = count($total_sections);
-        $sections = [];
+    $array_chunks = [];
+    $sections = json_decode($doc->table_content);
 
-        foreach ($total_sections as $key => $section) {
+   
 
-            $sec_arr = ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $section->title), 'table_no' => $section->table_no, 'page_no' => $section->page_no];
-            array_push($sections, $sec_arr);
-            if (!empty($section->sub_sections)) {
-                $sub_secs = json_decode($section->sub_sections);
-                $sections_count += count($sub_secs);
-                foreach ($sub_secs as $key => $subSec) {
-                    array_push($sections, ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $subSec->title), 'table_no' => $section->table_no . '.' . ++$key, 'page_no' => $section->page_no + $key]);
-                }
-            }
-        }
-
-        if (count($sections) >= 23) {
+    if (count($sections) >= 23) {
             $array_chunks = array_chunk($sections, 23);
         } else {
             $array_chunks[] = $sections;
@@ -159,13 +146,13 @@
                             @foreach($array as $key => $element)
                                 <tr>
                                     <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
-                                        {{ $element['table_no'] }}
+                                        {{ $element->table_no }}
                                     </td>
                                     <td class="text-right pr-1" style="width: 80%; padding-right: 15px;">
-                                        {!!  str_replace(':', ' ', $element['title']) !!}
+                                        {!!  str_replace(':', ' ', $element->title) !!}
                                     </td>
                                     <td dir="ltr" class="text-center" style="width: 10%; direction: ltr">
-                                        {{ $element['page_no'] }}
+                                        {{ $element->page_no }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -189,37 +176,7 @@
             $chunkSubSecs = [];
             if (!empty($section->sub_sections)) {
                 $sub_sec_array = json_decode($section->sub_sections);
-                if (count($sub_sec_array) >= 4) {
-                    if ($section->prePageTitle == 'الاشتراطات الخاصة') {
-                        $firstChunk = array_slice($sub_sec_array, 0, 2);
-                        $secChunk = array_slice($sub_sec_array, 2, 1);
-                        $thirdChunk = array_slice($sub_sec_array, 3, 1);
-                        $fourth = array_slice($sub_sec_array, 3, 2);
-                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 5), 5);
-
-                    } else if ($section->prePageTitle == 'الاشتراطات العامة') {
-                        $firstChunk = array_slice($sub_sec_array, 0, 8);
-                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 8), 8);
-                    } else if ($section->prePageTitle == 'الاشتراطات الفنية') {
-                        $firstChunk = array_slice($sub_sec_array, 0, 2);
-                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 2), 1);
-                    } else {
-                        $firstChunk = array_slice($sub_sec_array, 0, 5);
-                        $chunkSubSecs = array_chunk(array_slice($sub_sec_array, 5), 4);
-
-                    }
-                    $result = [$firstChunk];
-                    if (isset($secChunk)) {
-                        $result[] = $secChunk;
-                    }
-
-                    if (isset($fourth)) {
-                        $result[] = $fourth;
-                    }
-                    $chunkSubSecs = array_merge($result, $chunkSubSecs);
-                } else {
-                    $chunkSubSecs[] = json_decode($section->sub_sections);
-                }
+                $chunkSubSecs[] = json_decode($section->sub_sections);
             }
             $sec_page_no = 0;
         @endphp
@@ -435,7 +392,6 @@
                                         
                                     @endforeach
                                 @endif
-
                         @endif
 
 
@@ -523,6 +479,52 @@
 
 
     @endforeach
+
+
+    @include('print.section_6',['doc' => $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+    
+    @php
+        $page_no = 10;
+    @endphp
+
+    @include('print.section_7', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+
+    @php
+        $page_no = 12;
+    @endphp
+
+
+    @include('print.section_8', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+    @php
+        $page_no = 12;
+    @endphp
+
+    @include('print.section_9', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+    
+    @php
+        $page_no = 14;
+    @endphp
+
+    @include('print.section_10', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+
+    @php
+        $page_no = 19;
+    @endphp
+
+    @include('print.section_11', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+    
+    @php
+        $page_no = 23;
+    @endphp
+
+    @include('print.section_12', ['doc'=> $doc, 'page_img' => $page_img, 'page_no' => $page_no])
+    
+    @php
+        $page_no = 29;  
+    @endphp
 
     <div class="page-sm table">
         <div class="cover-image">

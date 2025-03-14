@@ -291,3 +291,93 @@ table tr {
     font-size: 11px;
     font-weight: bold;
 }
+.table_content h2, .table_content h3 {
+    color: #28889E !important;
+    margin: 0px !important;
+    line-height: 1 !important;
+}
+.section {
+    margin-bottom: 20px;
+}
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.list-item {
+    display: table;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+.number {
+    min-width: 50px;
+    color: #000;
+    line-height: 1.8;
+    margin-left: 10px;
+    font-size: 11px;
+    direction: ltr !important;
+    width: 40px;
+    display: table-cell;
+}
+.number-main {
+    min-width: 50px;
+    font-weight: bold;
+    color: #28889E;
+    line-height: 1.5;
+    margin-left: 10px;
+    font-size: 11px;
+    direction: ltr !important;
+    width: 40px;
+    display: table-cell;
+}
+a {
+    direction: ltr !important;
+}
+.text {
+    flex: 1;
+    line-height: 1.8;
+    color: #000;
+    font-size: 11px;
+    text-align: justify !important;
+    clear: both;
+    display: table-cell;
+    vertical-align: middle;
+}
+.bold {
+    font-weight: bold;
+}
+.ltr-dir{
+    direction: ltr !important;
+}
+.end{
+    text-align: end;
+}
+
+
+.center{
+    text-align: center !important;
+
+}
+
+.list {
+    list-style-type: none; 
+    margin: 0;
+    padding: 0;
+}
+
+.list-main-item {
+    width: 100%; 
+}
+
+.list-item {
+    clear: both; 
+}
+
+.number-main,
+.number {
+    float: right; 
+}
+
+.text {
+    overflow: hidden;
+}

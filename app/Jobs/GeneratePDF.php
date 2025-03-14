@@ -66,10 +66,10 @@ class GeneratePDF implements ShouldQueue
         //     ->save(storage_path("app/public/{$this->fileName}"));
 
 
-        $pdf = SnappyPdf::loadView('print', ['doc' => $this->doc])
+        $pdf = SnappyPdf::loadView('print.print', ['doc' => $this->doc])
             ->setOption('encoding', 'UTF-8') // Ensure proper encoding for fonts // Prevents shrinking text
             ->setOption('default-header', false)
-            ->setPaper('a4')
+            ->setPaper('A4')
             ->setOption('margin-top', '0')
             ->setOption('margin-bottom', '0')
             ->setOption('margin-left', '0')

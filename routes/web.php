@@ -12,66 +12,36 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 
-// function wrapEnglishWords($text)
-// {
-//     return preg_replace_callback('/\b[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*\b/', function ($matches) {
-//         return "<span dir='ltr' style='direction: ltr'>{$matches[0]}</span>";
-//     }, $text);
-// }
 
-// function addNewLineBeforeNumberedSpans($text)
-// {
-//     return preg_replace('/(?<!\n)(<span dir=[\'"]ltr[\'"] style=[\'"]direction: ltr[\'"]>\d+\.\d+\.\d+<\/span>)/', "<br>$1", $text);
-// }
+Route::get('draw_table', function() {
+    $array_chunks = [];
+        $total_sections = DocumentSection::where('document_id', 2)->get();
+        $sections_count = count($total_sections);
+        $sections = [];
 
-// Route::get('/adding-br', function () {
-   
+        foreach ($total_sections as $key => $section) {
 
-//     $secs = DocumentSection::where('document_id', 16)->where('sub_sections', '!=', null)->get();
-//    foreach($secs as $sec) {
-//     $json = json_decode($sec->sub_sections);
-//     foreach($json as $line) {
-//         $line->content = addNewLineBeforeNumberedSpans($line->content);
-//     }
-//     $sec->sub_sections = json_encode($json);
-//     $sec->save();
-//    }
+            $sec_arr = ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $section->title), 'table_no' => $section->table_no, 'page_no' => $section->page_no];
+            array_push($sections, $sec_arr);
+            if (!empty($section->sub_sections)) {
+                $sub_secs = json_decode($section->sub_sections);
+                $sections_count += count($sub_secs);
+                foreach ($sub_secs as $key => $subSec) {
+                    array_push($sections, ['title' => str_replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'], '', $subSec->title), 'table_no' => $section->table_no . '.' . ++$key, 'page_no' => $section->page_no + $key]);
+                }
+            }
+        }
 
-   
-   
-// });
+        $json = json_encode($sections, true);
 
+        $doc = TAndCDocument::where('id', 17)->first();
+        $doc->table_content = $json;
+        $doc->save();
 
-// Route::get('/remove-tags', function () {
+    
+});
 
 
-
-//     $secs = DocumentSection::where('document_id', '2')->get();
-
-
-//     foreach ($secs as $sec) {
-//         if (!empty($sec->sub_sections)) {
-//             $js = json_decode($sec->sub_sections);
-//             foreach ($js as $line) {
-//                 $line->title = wrapEnglishWords(str_replace(['&nbsp;','1','2','3','4','5','6','7','8','9','0','.'], ' ', strip_tags($line->title)));
-//                 $line->content = wrapEnglishWords(str_replace(['&nbsp;'], ' ', strip_tags($line->content)));
-//             }
-//             $sec->sub_sections = json_encode($js);
-//             $sec->save();
-//         }
-
-//     }
-// });
-
-// Route::get('/only-fix', function() {
-//     $secs = DocumentSection::where('document_id', '16')->get();
-
-
-//     foreach ($secs as $sec) {
-//         $sec->notes = wrapEnglishWords($sec->notes);
-//         $sec->save();
-//     }
-// });
 
 Route::get('/login', function () {
     return view('auth.login');
