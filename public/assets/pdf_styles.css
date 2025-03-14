@@ -26,6 +26,8 @@
 body {
     unicode-bidi: bidi-override;
     text-align: right;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 
@@ -269,6 +271,8 @@ table tr {
     body {
         margin: 0;
         padding: 0;
+        width: 100% !important;
+        height: 100% !important;
     }
 
     
